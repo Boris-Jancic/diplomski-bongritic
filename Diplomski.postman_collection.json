@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "5919951a-ddc8-4a32-b8ae-8f4580dfda62",
+		"name": "Diplomski",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Video game api",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "https://api.rawg.io/api/games?key=f798f8d74f4f4bb298e211f29782ce48&page=2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.rawg.io/api/games?key=f798f8d74f4f4bb298e211f29782ce48&page=2",
+							"protocol": "https",
+							"host": [
+								"api",
+								"rawg",
+								"io"
+							],
+							"path": [
+								"api",
+								"games"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "f798f8d74f4f4bb298e211f29782ce48"
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Backend",
+			"item": [
+				{
+					"name": "posts",
+					"item": [
+						{
+							"name": "Get post",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Carr123y\",\r\n    \"creator\": \"Newman\",\r\n    \"message\": \"John\",\r\n    \"selectedFile\": \"1234123412312341\",\r\n    \"comments\": [\r\n        {\r\n            \"author\": \"John Boing\",\r\n            \"text\": \"Bas losa losa losa\",\r\n            \"grade\": 4\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/posts",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create post",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Carr123y\",\r\n    \"creator\": \"Newman\",\r\n    \"message\": \"John\",\r\n    \"selectedFile\": \"1234123412312341\",\r\n    \"comments\": [\r\n        {\r\n            \"author\": \"John Boing\",\r\n            \"text\": \"Bas losa losa losa\",\r\n            \"grade\": 4\r\n        },\r\n        {\r\n            \"author\": \"John Boing\",\r\n            \"text\": \"Bas losa losa losa\",\r\n            \"grade\": 4\r\n        },\r\n        {\r\n            \"author\": \"John Boing\",\r\n            \"text\": \"Bas losa losa losa\",\r\n            \"grade\": 4\r\n        },\r\n        {\r\n            \"author\": \"John Boing\",\r\n            \"text\": \"Bas losa losa losa\",\r\n            \"grade\": 4\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/posts",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "clients",
+					"item": [
+						{
+							"name": "Get clients",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "Create client",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"John\",\r\n    \"dateOfRegistration\": \"John\",\r\n    \"jmbg\": \"1234123412341\",\r\n    \"email\": \"john@email.com\",\r\n    \"password\": \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/clients",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"clients"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "reviewers",
+					"item": []
+				},
+				{
+					"name": "admins",
+					"item": []
+				}
+			]
+		}
+	]
+}
