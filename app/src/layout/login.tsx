@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormLabel,
@@ -9,9 +8,29 @@ import {
   Link,
   Stack,
   Image,
+  useToast,
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { AuthenticationService } from '../api/auth/authService';
 
 export default function Login() {
+  const [credentials, setCredentials] = useState({
+    email: String,
+    password: String
+  })
+  const toast = useToast()
+
+  const handleLogin = () => {
+    AuthenticationService.login(credentials, toast)
+  }
+  
+  const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: String) => {
+      const credentialsChanged = {...credentials};
+      //@ts-ignore
+      credentialsChanged[prop] = e.target.value;
+      setCredentials(credentialsChanged)
+  }
+
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
@@ -19,22 +38,23 @@ export default function Login() {
           <Heading fontSize={'2xl'}>Sign in to your account</Heading>
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
-            <Input type="email" />
+            <Input type="email"  onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'email')}/>
           </FormControl>
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
-            <Input type="password" />
+            <Input type="password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'password')}/>
           </FormControl>
           <Stack spacing={6}>
             <Stack
               direction={{ base: 'column', sm: 'row' }}
               align={'start'}
               justify={'space-between'}>
-              <Link color={'blue.500'}>Forgot password?</Link>
+              <Link color={'green.300'}>Forgot password?</Link>
             </Stack>
-            <Button colorScheme={'blue'} variant={'solid'}>
+            <Button colorScheme={'green'} variant={'solid'} onClick={() => handleLogin()}>
               Sign in
             </Button>
+            <Link color={'green.500'} href="/register">Not registered? Sign up here!</Link>
           </Stack>
         </Stack>
       </Flex>

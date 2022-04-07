@@ -15,6 +15,7 @@ import {
   Container,
   VStack,
 } from '@chakra-ui/react';
+import { TokenService } from '../api/client/tokenService';
 
 interface IBlogTags {
   tags: Array<string>;
@@ -57,6 +58,10 @@ export const BlogAuthor: React.FC<BlogAuthorProps> = (props) => {
 };
 
 const Home = () => {
+
+
+  console.log(TokenService.getToken())
+
   return (
     <Container maxW={'7xl'} p="12">
       <Heading as="h1">Stories by Chakra Templates</Heading>

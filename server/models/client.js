@@ -1,16 +1,9 @@
 import mongoose from 'mongoose'
 
 const clientSchema = mongoose.Schema({
-    firstName: {
+    username:{
         type: String,
-    },
-    secondName:{
-        type: String,
-    },
-    jmbg: {
-        type: String,
-        required: true,
-        unique:true
+        required: true
     },
     email: {
         type: String,
@@ -25,6 +18,4 @@ const clientSchema = mongoose.Schema({
     timestamps: true
 })
 
-const client = mongoose.model('client', clientSchema)
-
-export default client
+export default mongoose.model('Client', clientSchema)

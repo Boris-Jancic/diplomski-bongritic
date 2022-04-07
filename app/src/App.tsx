@@ -13,7 +13,7 @@ import Navbar from "./components/navbar"
 import Footer from "./components/footer"
 import { Routes, Route, Link } from "react-router-dom";
 import Login from "./layout/login"
-import Register from "./layout/register"
+import RegisterClient from "./layout/registerClient"
 import Home from "./layout/home"
 
 export const App = () => (
@@ -25,11 +25,10 @@ export const App = () => (
       <Grid minH="100vh" p={3}>
         <VStack spacing={8}>
 
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<RegisterClient />} />
         </Routes>
 
         </VStack>
