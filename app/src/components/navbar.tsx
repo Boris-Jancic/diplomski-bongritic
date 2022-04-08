@@ -12,8 +12,9 @@ import {
   PopoverTrigger,
   PopoverContent,
   useColorModeValue,
-  useBreakpointValue,
   useDisclosure,
+  PopoverArrow,
+  PopoverBody,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -22,11 +23,30 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import Logo from '../images/flower.svg'
-import { Image } from '@chakra-ui/react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { authAtom } from '../state/auth';
+import { useEffect, useState } from 'react';
+import { AuthenticationService } from '../api/auth/authService';
+import { BsThreeDotsVertical, BsFillPersonFill, BsPlus } from 'react-icons/bs';
+import { RiFileShredLine, RiLogoutCircleRLine } from 'react-icons/ri';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
+  const [ client, setClient ] = useRecoilState(authAtom);
+  const setAuth = useSetRecoilState(authAtom);
+
+  useEffect(() => {
+    if (client !== null) 
+      console.log('logged in') 
+    else
+      console.log('logged out') 
+    console.log(client)
+  }, [])
+
+  const handleLogOut = () => {
+    console.log('logged out')
+    AuthenticationService.logout()
+  }
 
   return (
     <Box>
@@ -68,23 +88,87 @@ export default function Navbar() {
           spacing={6}>
 
           <ColorModeSwitcher justifySelf="flex-end" />
-            
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'link'}
-            href={'/login'}>
-            Sign In
-          </Button>
-          <Button
-            as={'a'}
-            fontSize={'sm'}
-            fontWeight={400}
-            variant={'ghost'}
-            href={'/register'}>
-            Sign up
-          </Button>
+          { client && (
+            <>
+              <Button
+                as={'a'}
+                fontSize={'sm'}
+                fontWeight={400}
+                variant={'solid'}
+                rightIcon={<BsPlus />}
+                colorScheme={'green'}
+                href={'/game/review'}>
+                Review
+              </Button>
+              <Flex justifyContent="center" mt={4}>
+                <Popover placement="bottom" isLazy>
+                  <PopoverTrigger>
+                    <IconButton
+                      aria-label="More server options"
+                      icon={<BsThreeDotsVertical />}
+                      variant="solid"
+                      w="fit-content"
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent w="fit-content" _focus={{ boxShadow: 'none' }}>
+                    <PopoverArrow />
+                    <PopoverBody>
+                      <Stack>
+                        <Button
+                          w="194px"
+                          variant="ghost"
+                          rightIcon={<BsFillPersonFill />}
+                          justifyContent="space-between"
+                          fontWeight="normal"
+                          fontSize="sm">
+                          Profile
+                        </Button>
+                        <Button
+                          w="194px"
+                          variant="ghost"
+                          rightIcon={<RiFileShredLine />}
+                          justifyContent="space-between"
+                          fontWeight="normal"
+                          fontSize="sm">
+                          My reviews
+                        </Button>
+                        <Button
+                          w="194px"
+                          variant="ghost"
+                          rightIcon={<RiLogoutCircleRLine />}
+                          justifyContent="space-between"
+                          fontWeight="normal"
+                          fontSize="sm"
+                          onClick={handleLogOut}>
+                          Sign out
+                        </Button>
+                      </Stack>
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
+              </Flex>
+            </>
+          )}
+          { !client && (
+            <>
+              <Button
+                as={'a'}
+                fontSize={'sm'}
+                fontWeight={400}
+                variant={'link'}
+                href={'/login'}>
+                Sign In
+              </Button>
+              <Button
+                as={'a'}
+                fontSize={'sm'}
+                fontWeight={400}
+                variant={'ghost'}
+                href={'/register'}>
+                Sign up
+              </Button>
+            </>
+          )}
         </Stack>
       </Flex>
 
@@ -248,6 +332,10 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
   {
+    label: 'Home',
+    href: '/',
+  },
+  {
     label: 'Game reviews',
     children: [
       {
@@ -261,28 +349,5 @@ const NAV_ITEMS: Array<NavItem> = [
         href: '/reviews/users',
       }
     ],
-  },
-  {
-    label: 'Find Work',
-    children: [
-      {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
-        href: '#',
-      },
-      {
-        label: 'Freelance Projects',
-        subLabel: 'An exclusive list for contract work',
-        href: '#',
-      },
-    ],
-  },
-  {
-    label: 'Learn Design',
-    href: '#',
-  },
-  {
-    label: 'Hire Designers',
-    href: '#',
-  },
+  }
 ];

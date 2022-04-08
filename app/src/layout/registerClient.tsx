@@ -14,12 +14,15 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import * as Yup from "yup";
 import { AuthenticationService } from '../api/auth/authService';
+import { useRecoilState } from 'recoil';
+import { authAtom } from '../state/auth';
+import * as Yup from "yup";
 
 export default function RegisterClient() {
+  const [ isLogged, setIsLogged ] = useRecoilState(authAtom);
   const [showPassword, setShowPassword] = useState(false);  
   const toast = useToast()
   const [client, setClient] = useState({
@@ -37,6 +40,10 @@ export default function RegisterClient() {
     email: false,
     password: false
   })
+  
+  useEffect(() => {
+    if (isLogged) window.location.assign("/") 
+  }, [])
 
   // Handles client state changing by input
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: String) => {
@@ -120,10 +127,10 @@ export default function RegisterClient() {
             <Button
               loadingText="Submitting"
               size="lg"
-              bg={'blue.400'}
+              bg={'green.400'}
               color={'white'}
               _hover={{
-                bg: 'blue.500',
+                bg: 'green.500',
               }}
               onClick={() => handleRegister()}
               >
@@ -132,7 +139,7 @@ export default function RegisterClient() {
           </Stack>
             <Stack pt={6}>
               <Text align={'center'}>
-                Already a user? <Link color={'blue.400'} href="/login">Login</Link>
+                Already a user? <Link color={'green.400'} href="/login">Login</Link>
               </Text>
             </Stack>
           </Stack>

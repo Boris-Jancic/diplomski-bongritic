@@ -25,7 +25,7 @@ export const createClient = async (req, res) => {
 
     try {
         newClient.password = await bcrypt.hash(newClient.password, await bcrypt.genSalt(10));
-        // newClient.save()
+        newClient.save()
         return res.status(201).send({message: 'We have sent you a email regarding your verification'})
     } catch (error) {
         return res.status(409).json({message: error.message})

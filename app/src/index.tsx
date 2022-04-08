@@ -3,19 +3,17 @@ import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 import { BrowserRouter } from "react-router-dom";
+import RecoilNexus from "recoil-nexus";
 import {
   RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
 } from 'recoil';
 
 ReactDOM.render(
   <RecoilRoot>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+      <RecoilNexus />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
   </RecoilRoot>,
   document.getElementById("root"),
 )

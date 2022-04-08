@@ -1,3 +1,6 @@
+
+import { setRecoil } from "recoil-nexus";
+import { authAtom } from "../../state/auth";
 import AxiosClient from "../client/axiosClient";
 import {TokenService} from "../client/tokenService";
 
@@ -9,15 +12,14 @@ export const AuthenticationService = {
 };
 
 async function login(userCredentials: any, toast: any) {
-    console.log(userCredentials)
     try {
         await AxiosClient.post("http://localhost:5000/auth/client/login", userCredentials)
             .then(function (response) {
-                const decoded_token = TokenService.decodeToken(response.data);
+                let decoded_token = TokenService.decodeToken(response.data);
                 if (decoded_token) {
-                    TokenService.setToken(response.data);
+                    localStorage.setItem('user', JSON.stringify(decoded_token));
+                    setRecoil(authAtom, decoded_token)
                     window.location.assign("/");
-                    console.log(decoded_token)
                 } else {
                     console.error("Invalid token");
                 }
@@ -25,25 +27,13 @@ async function login(userCredentials: any, toast: any) {
             .catch(function (error) {
             switch (error.response.status) {
                 case 400:
-                    toast({
-                        title: `Bad request`,
-                        position: 'top-right',
-                        isClosable: true,
-                    })
+                    toast('Wrong credentials', 'warning')
                     break;
                 case 403:
-                    toast({
-                        title: `You do not have the permission to use bongritic`,
-                        position: 'top-right',
-                        isClosable: true,
-                    })
+                    toast('You are forbidden from uysing bongritic', 'error')
                     break;
                 case 404:
-                    toast({
-                        title: `Wrong username or password`,
-                        position: 'top-right',
-                        isClosable: true,
-                    })
+                    toast('Wrong credentials', 'warning')
                     break;
                 default:
                     break;
@@ -55,7 +45,8 @@ async function login(userCredentials: any, toast: any) {
 }
 
 function logout() {
-    TokenService.removeToken();
+    setRecoil(authAtom, null);
+    localStorage.removeItem('user');
     window.location.assign("/login");
 }
 

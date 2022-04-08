@@ -14,6 +14,8 @@ import Footer from "./components/footer"
 import { Routes, Route, Link } from "react-router-dom";
 import Login from "./layout/login"
 import RegisterClient from "./layout/registerClient"
+import CriticReviews from "./layout/criticReviews"
+import UserReviews from "./layout/userReviews"
 import Home from "./layout/home"
 
 export const App = () => (
@@ -27,6 +29,8 @@ export const App = () => (
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/reviews/critics" element={<CriticReviews />} />
+          <Route path="/reviews/users" element={<UserReviews />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterClient />} />
         </Routes>

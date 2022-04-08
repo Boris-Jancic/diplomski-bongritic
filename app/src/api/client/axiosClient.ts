@@ -1,6 +1,8 @@
 import axios from "axios";
 import {TokenService} from "./tokenService";
 import {AuthenticationService} from "../auth/authService";
+import { useSetRecoilState } from "recoil";
+import { authAtom } from "../../state/auth";
 
 const AxiosClient = axios.create();
 
@@ -19,7 +21,7 @@ AxiosClient.interceptors.request.use(function success(config) {
     return config;
 });
 
-// U slučaju da se sa Article backenda vrati forbidden, token je istekao te izloguj korisnika
+// In case of forbidden response log the user out
 AxiosClient.interceptors.response.use(
     function success(response) {
         return response;
