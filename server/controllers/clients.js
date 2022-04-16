@@ -18,10 +18,12 @@ export const createClient = async (req, res) => {
     if (newClient === null) return res.status(400).json({message: 'Bad request'})
     
     if (!isValidEmail(newClient.email)) return res.status(400).json({message: 'Email not valid'})
-
-    if (await Client.exists({email: newClient.email}).exec() !== null) {
+    
+    if (await Client.exists({username: newClient.username}).exec() !== null) 
+        return res.status(409).json({message: 'A client with that username is already registered'})
+    
+    if (await Client.exists({email: newClient.email}).exec() !== null) 
         return res.status(409).json({message: 'A client with that email is already registered'})
-    }
 
     try {
         newClient.password = await bcrypt.hash(newClient.password, await bcrypt.genSalt(10));
