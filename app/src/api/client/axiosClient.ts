@@ -11,7 +11,7 @@ AxiosClient.interceptors.request.use(function success(config) {
     const token = TokenService.getToken();
     if (token) {
         if (TokenService.didTokenExpire()) {
-            alert("Token je istekao");
+            alert("Token expired, log in again");
             AuthenticationService.logout();
             return false;
         }

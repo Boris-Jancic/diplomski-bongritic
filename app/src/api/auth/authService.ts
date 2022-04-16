@@ -11,9 +11,11 @@ export const AuthenticationService = {
     registerClient,
 };
 
+const BASE_URL = process.env.REACT_APP_API_KEY
+
 async function login(userCredentials: any, toast: any) {
     try {
-        await AxiosClient.post("http://localhost:5000/auth/client/login", userCredentials)
+        await AxiosClient.post(`${BASE_URL}/auth/client/login`, userCredentials)
             .then(function (response) {
                 let decoded_token = TokenService.decodeToken(response.data);
                 if (decoded_token) {
@@ -64,7 +66,7 @@ function getRole() {
 async function registerClient(client: any, toast: any) {
     console.log(client)
     try {
-        await AxiosClient.post("http://localhost:5000/clients", client)
+        await AxiosClient.post(`${BASE_URL}/clients`, client)
             .then(function (response) {
                 toast(response.data.message, 'success')
             })
