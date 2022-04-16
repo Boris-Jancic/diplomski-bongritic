@@ -33,18 +33,8 @@ import { RiFileShredLine, RiLogoutCircleRLine } from 'react-icons/ri';
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   const [ client, setClient ] = useRecoilState(authAtom);
-  const setAuth = useSetRecoilState(authAtom);
-
-  useEffect(() => {
-    if (client !== null) 
-      console.log('logged in') 
-    else
-      console.log('logged out') 
-    console.log(client)
-  }, [])
 
   const handleLogOut = () => {
-    console.log('logged out')
     AuthenticationService.logout()
   }
 
@@ -95,10 +85,9 @@ export default function Navbar() {
                 fontSize={'sm'}
                 fontWeight={400}
                 variant={'solid'}
-                rightIcon={<BsPlus />}
                 colorScheme={'green'}
-                href={'/game/review'}>
-                Review
+                href={'/games'}>
+                Browse games
               </Button>
               <Flex justifyContent="center" mt={4}>
                 <Popover placement="bottom" isLazy>
