@@ -157,6 +157,9 @@ export module Games {
         seo_title: string;
         seo_description: string;
         seo_keywords: string;
+        name: string;
+        background_image: string;
+        background_image_additional: string;
         seo_h1: string;
         noindex: boolean;
         nofollow: boolean;
