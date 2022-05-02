@@ -1,126 +1,124 @@
-
-
 import React, { useEffect, useState } from 'react';
-import { Box, Center, Container, Flex, Grid, GridItem, Heading, IconButton, Text, useBreakpointValue } from '@chakra-ui/react';
-// Here we have used react-icons package for the icons
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-// And react-slick as our Carousel Lib
-import Slider from 'react-slick';
-import { Games } from '../interface/game';
+import { Box, Button, Center, Container, Flex, FormControl, FormHelperText, FormLabel, Grid, GridItem, Heading, IconButton, Image, Input, RangeSliderFilledTrack, RangeSliderMark, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Text, Textarea, toast, useBreakpointValue, useToast } from '@chakra-ui/react';
 import { getGame } from '../api/games/gameService';
-
-// Settings for the slider
-const settings = {
-  dots: true,
-  arrows: false,
-  fade: true,
-  infinite: true,
-  autoplay: true,
-  speed: 500,
-  autoplaySpeed: 5000,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-};
+import { Blog } from '../interface/post';
+import { Games } from '../interface/game';
+import { authAtom } from '../state/auth';
+import { useRecoilState } from 'recoil';
+import { postReviewerPost } from '../api/blogs/blogService';
+import { error } from 'console';
 
 export default function GameReview() {
-  // As we have used custom buttons, we need a reference variable to
-  // change the state
-  const [slider, setSlider] = React.useState<Slider | null>(null);
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get('id');
+    const toast = useToast()
+    const [user, setUser] = useRecoilState(authAtom);
+    const [game, setGame] = useState<Games.GameData>()
+    const [post, setPost] = useState<Blog.Post>(
+        {
+        author: user.email,
+        title: '',
+        text: '',
+        grade: 1,
+        game: Number(id),
+        comments: []}
+    )
 
-  // These are the breakpoints which changes the position of the
-  // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
-  const side = useBreakpointValue({ base: '30%', md: '10px' });  
-  const queryParams = new URLSearchParams(window.location.search);
-  const [game, setGame] = useState<Games.GameData>()
-
-  const id = queryParams.get('id');
-
-  useEffect(() => {
+    useEffect(() => {
     getGame(Number(id))
     .then(response => setGame(response.data))
-  }, [])
+    }, [])
 
-  // These are the images used in the slide
-  const cards = [game?.background_image, game?.background_image_additional];
-  console.log(game)
+    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: string) => {
+        const postChanged = {...post};
+        //@ts-ignore
+        postChanged[prop] = e.target.value;
+        setPost(postChanged)
+    }
 
-  return (
-    <Box>
-      <Box
-        position={'relative'}
-        height={{ base: '450px', md: '600px', lg: '800px' }}
-        width={{ base: '420px', md: '1200px', lg: '1800px' }}
-        overflow={'hidden'}>
-        {/* CSS files for react-slick */}
-        <link
-          rel="stylesheet"
-          type="text/css"
-          charSet="UTF-8"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-        />
-        {/* Left Icon */}
-        <IconButton
-          aria-label="left-arrow"
-          colorScheme="green"
-          borderRadius="full"
-          position="absolute"
-          left={side}
-          top={top}
-          transform={'translate(0%, -50%)'}
-          zIndex={2}
-          onClick={() => slider?.slickPrev()}>
-          <BiLeftArrowAlt />
-        </IconButton>
-        {/* Right Icon */}
-        <IconButton
-          aria-label="right-arrow"
-          colorScheme="green"
-          borderRadius="full"
-          position="absolute"
-          right={side}
-          top={top}
-          transform={'translate(0%, -50%)'}
-          zIndex={2}
-          onClick={() => slider?.slickNext()}>
-          <BiRightArrowAlt />
-        </IconButton>
-        <Slider {...settings} ref={(slider) => setSlider(slider)}>
-          {cards.map((url, index) => (
-            <Flex>
-              <Box
-                key={index}
-                height={'3xl'}
-                position="relative"
-                backgroundPosition="center"
-                backgroundRepeat="no-repeat"
-                backgroundSize="cover"
-                backgroundImage={`url(${url})`}
-                rounded={20}
-              />
-            </Flex>
-          ))}
-        </Slider>
-      </Box>
-      <Center>
-        <Heading>
-          <Text as="h1" fontWeight="black" my={2} align='left'>
-            <u>{game?.name}</u>
-          </Text>
-        </Heading>
-      </Center>
-      <Center>
-        <Flex width={{ base: '400px', md: '400px', lg: '800px' }} bg='gray.100' rounded={10} paddingLeft={10} paddingRight={10}>
-          <Text as="h1" fontWeight="hairline" my={2} align='left'>
-            {game?.description_raw}
-          </Text>
-        </Flex>
-      </Center>
-    </Box>
-  );
+    const inputHandlerSlider = (grade: number) => {
+        post.grade = grade
+    }
+
+    const handleSubmit = async () => {
+        await postReviewerPost(post)
+        .then(() => window.location.assign('review/success'))
+
+        .catch(error => error.response)
+        .then(payload => payload.data)
+        .then(data => data.messages?.map((message: String) => {
+            toast({
+                title: message,
+                status: 'error',
+                position: 'bottom',
+                isClosable: true,
+            })
+        }))
+    }
+
+    return (
+        <Box>
+            <Center>
+                <Image src={game?.background_image} w="50%" rounded="20px" position='relative' borderRadius='full'/>
+            </Center>
+            
+            <Center>
+            <Heading>
+                <Text as="h1" fontWeight="black" my={2} align='left'>
+                Reviewing: <u>{game?.name}</u>
+                </Text>
+            </Heading>
+            </Center>
+
+            <Center>
+                <FormControl width={{ base: '90%', md: '80%', lg: '60%' }}>
+                    <FormLabel htmlFor='title'>Title</FormLabel>
+                    <Input type="text" id='title' onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'title')}/>
+                    <FormLabel htmlFor='text'>Review text</FormLabel>
+                    <Textarea
+                        id='text' 
+                        //@ts-ignore
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'text')} />
+                        
+                    <FormLabel htmlFor='grade'>Grade</FormLabel>
+                    
+                    <Slider aria-label='slider-ex-1' colorScheme='green' id='grade' defaultValue={1} min={1} max={5}
+                        onChange={(value: number) => inputHandlerSlider(value)} >
+                        <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
+                            1
+                        </SliderMark>
+                        <SliderMark value={2} mt='1' ml='-2.5' fontSize='sm'>
+                            2
+                        </SliderMark>
+                        <SliderMark value={3} mt='1' ml='-2.5' fontSize='sm'>
+                            3
+                        </SliderMark>
+                        <SliderMark value={4} mt='1' ml='-2.5' fontSize='sm'>
+                            4
+                        </SliderMark>
+                        <SliderMark value={5} mt='1' ml='-2.5' fontSize='sm'>
+                            5
+                        </SliderMark>
+                        <SliderTrack>
+                            <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb color='green.900' />
+                    </Slider>
+
+                    <Button 
+                        mt={4}
+                        width='200px' 
+                        colorScheme='teal' 
+                        size='lg' 
+                        variant='outline' 
+                        color='green.500'
+                        fontSize={'sm'}
+                        fontWeight={400}
+                        onClick={() => handleSubmit()}>
+                        Review
+                    </Button>
+                </FormControl>
+            </Center>
+        </Box>
+    );
 }

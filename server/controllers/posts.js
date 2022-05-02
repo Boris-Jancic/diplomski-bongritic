@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import Post from '../models/post.js'
 
+
 export const getPosts = async (req, res) => { 
     try {
         const posts = await Post.find();
@@ -12,9 +13,7 @@ export const getPosts = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const post = req.body;
-    const newPost = new Post(post)
-    console.log("Creating a post")
+    const newPost = new Post(req.body)
     try {
         newPost.save()
         res.status(201).send(newPost)

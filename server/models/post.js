@@ -5,17 +5,19 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    creator: {
+    author: {
         type: String,
         required: true,
     },
-    message: {
+    text: {
         type: String,
         required: true,
     },
-    selectedFile: {
-        type: String,
+    grade: {
+        type: Number,
         required: true,
+        min: 1,
+        max: 5
     },
     comments: [
         {

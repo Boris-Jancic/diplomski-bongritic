@@ -149,24 +149,15 @@ export module Games {
     }
 
     export interface GameData {
+        id: number;
         data: any;
-        count: number;
-        next: string;
-        previous?: any;
         results: Game[];
         seo_title: string;
-        seo_description: string;
-        seo_keywords: string;
         name: string;
         background_image: string;
         background_image_additional: string;
-        seo_h1: string;
-        noindex: boolean;
-        nofollow: boolean;
         description: string;
         description_raw: string;
-        filters: Filters;
-        nofollow_collections: string[];
     }
 
 }

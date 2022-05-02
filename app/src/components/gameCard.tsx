@@ -22,7 +22,7 @@ function GameCard(props: any) {
           <Stack direction='row'>
             {props.platforms?.map((item: Games.Platform) => <Badge variant='outline'>{item.platform.name}</Badge>)}
           </Stack>
-          <LinkOverlay href={`/games/review?id=${props.id}`} >
+          <LinkOverlay href={`/games/preview?id=${props.id}`} >
             <Text as="h2" fontWeight="semibold" my={2} align='left'>
             {props.name}
             </Text>
