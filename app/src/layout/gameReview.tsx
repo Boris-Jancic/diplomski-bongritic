@@ -20,13 +20,15 @@ export default function GameReview() {
         title: '',
         text: '',
         grade: 1,
-        game: Number(id),
+        game: game,
+        avatar: '',
+        createdAt: '',
         comments: []}
     )
 
     useEffect(() => {
-    getGame(Number(id))
-    .then(response => setGame(response.data))
+        getGame(Number(id))
+        .then(response => setGame(response.data))
     }, [])
 
     const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: string) => {
@@ -41,6 +43,8 @@ export default function GameReview() {
     }
 
     const handleSubmit = async () => {
+        post.game = game
+        console.log(post)
         await postReviewerPost(post)
         .then(() => window.location.assign('review/success'))
 

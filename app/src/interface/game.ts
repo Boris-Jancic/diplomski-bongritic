@@ -152,6 +152,7 @@ export module Games {
         id: number;
         data: any;
         results: Game[];
+        genres: Genre[];
         seo_title: string;
         name: string;
         background_image: string;

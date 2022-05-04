@@ -19,6 +19,8 @@ const postSchema = mongoose.Schema({
         min: 1,
         max: 5
     },
+    game: {
+    },
     comments: [
         {
             author: String,

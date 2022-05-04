@@ -1,12 +1,28 @@
-import mongoose from 'mongoose'
 import Post from '../models/post.js'
 
-
 export const getPosts = async (req, res) => { 
+    const { page = 1, limit = 10 } = req.query
     try {
-        const posts = await Post.find();
-        console.log("Getting posts")
-        res.status(200).json(posts);
+        const count = await Post.countDocuments()
+        const posts = await Post.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({"createdAt": -1})
+
+        res.status(200).json({
+            currentPage: page,
+            totalPages: Math.ceil(count / limit),
+            data: posts
+        });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getLatestPost = async (req, res) => { 
+    try {
+        const post = await Post.findOne().sort({"createdAt": -1}) 
+        res.status(200).json(post);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }

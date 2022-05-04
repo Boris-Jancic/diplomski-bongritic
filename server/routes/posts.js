@@ -1,6 +1,6 @@
 import express from "express"
 import { check, validationResult } from "express-validator";
-import { createPost, getPosts } from "../controllers/posts.js"
+import { createPost, getLatestPost, getPosts } from "../controllers/posts.js"
 
 const router = express.Router()
 
@@ -18,14 +18,12 @@ router.post('/',
     check("grade")
       .isNumeric()
       .isInt({ min:1, max: 5}),
-
-    check("game")
-      .isNumeric(),
   ],
   (req, res, next) => {
     const error = validationResult(req).formatWith(({ msg }) => msg);
 
     const hasError = !error.isEmpty();
+    console.log(error.array())
     if (hasError) {
       res.status(422).json({ messages: error.array() });
     } else {
@@ -34,5 +32,6 @@ router.post('/',
   }, createPost)
 
 router.get('/', getPosts)
+router.get('/latest', getLatestPost)
 
 export default router
