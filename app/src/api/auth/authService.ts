@@ -8,14 +8,14 @@ export const AuthenticationService = {
     login,
     logout,
     getRole,
-    registerClient,
+    registerReviewer,
 };
 
 const BASE_URL = process.env.REACT_APP_API_KEY
 
 async function login(userCredentials: any, toast: any) {
     try {
-        await AxiosClient.post(`${BASE_URL}/auth/client/login`, userCredentials)
+        await AxiosClient.post(`${BASE_URL}/auth/reviewer/login`, userCredentials)
             .then(function (response) {
                 let decoded_token = TokenService.decodeToken(response.data);
                 if (decoded_token) {
@@ -32,7 +32,7 @@ async function login(userCredentials: any, toast: any) {
                     toast('Wrong credentials', 'warning')
                     break;
                 case 403:
-                    toast('You are forbidden from uysing bongritic', 'error')
+                    toast('You are not authorized to use bongritic', 'error')
                     break;
                 case 404:
                     toast('Wrong credentials', 'warning')
@@ -63,10 +63,10 @@ function getRole() {
     }
 }
 
-async function registerClient(client: any, toast: any) {
-    console.log(client)
+async function registerReviewer(reviewer: any, toast: any) {
+    console.log(reviewer)
     try {
-        await AxiosClient.post(`${BASE_URL}/clients`, client)
+        await AxiosClient.post(`${BASE_URL}/auth/reviewer/register`, reviewer)
             .then(function (response) {
                 toast(response.data.message, 'success')
             })

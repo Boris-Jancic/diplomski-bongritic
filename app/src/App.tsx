@@ -10,7 +10,7 @@ import Navbar from "./components/navbar"
 import Footer from "./components/footer"
 import { Routes, Route, Link } from "react-router-dom";
 import Login from "./layout/login"
-import RegisterClient from "./layout/registerClient"
+import RegisterClient from "./layout/registerReviewer"
 import CriticReviews from "./layout/criticReviews"
 import UserReviews from "./layout/userReviews"
 import Home from "./layout/home"

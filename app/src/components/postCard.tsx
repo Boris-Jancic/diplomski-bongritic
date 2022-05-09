@@ -60,8 +60,8 @@ export default function PostCard(props: {post: Blog.Post}) {
                     {props.post.text}
                 </Text>
                 <BlogAuthor
-                    name={props.post.author}
-                    avatar={props.post.avatar}
+                    name={props.post.author.name}
+                    avatar={props.post.author.avatar}
                     date={new Date(props.post.createdAt)}
                 />
             </Box>

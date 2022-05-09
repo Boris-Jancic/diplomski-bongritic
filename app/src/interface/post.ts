@@ -2,8 +2,18 @@ import { SpaceProps } from "@chakra-ui/react";
 import { Games } from "./game";
 
 export module Blog {
+    export interface PostResponse {
+        totalPages: number;
+        currentPage: number;
+        posts: Post[];
+    }
+
     export interface Post {
-        author: string;
+        author: {
+            email: string,
+            name: string;
+            avatar: string;
+        };
         title: string;
         text: string;
         grade: number;

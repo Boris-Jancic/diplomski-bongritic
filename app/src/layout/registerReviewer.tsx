@@ -13,6 +13,7 @@ import {
   useColorModeValue,
   Link,
   useToast,
+  Image,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -26,10 +27,15 @@ export default function RegisterClient() {
   const [showPassword, setShowPassword] = useState(false);  
   const toast = useToast()
   const [client, setClient] = useState({
+    firstName: '',
+    lastName: '',
     username: '',
     email: '',
-    password: ''
+    password: '',
+    jmbg: '',
+    avatar: ''
   })
+  
   const validationSchema = Yup.object({
     username: Yup.string().required(),
     email: Yup.string().required(),
@@ -38,7 +44,11 @@ export default function RegisterClient() {
   const [errors, setErrors] = useState({
     username: false,
     email: false,
-    password: false
+    password: false,
+    firstName: false,
+    lastName: false,
+    jmbg: false,
+    avatar: false
   })
   
   useEffect(() => {
@@ -59,6 +69,10 @@ export default function RegisterClient() {
     !client.username ? errors.username = true : errors.username = false 
     !client.email ? errors.email = true : errors.email = false 
     !client.password ? errors.password = true : errors.password = false 
+    !client.firstName ? errors.firstName = true : errors.firstName = false 
+    !client.lastName ? errors.lastName = true : errors.lastName = false 
+    !client.jmbg ? errors.jmbg = true : errors.jmbg = false 
+    !client.avatar ? errors.avatar = true : errors.avatar = false 
   }
 
   // Pop up toast
@@ -75,9 +89,22 @@ export default function RegisterClient() {
   const handleRegister = () => {
     validationSchema.isValid(client)
       .then(function (valid) {
-        valid ? AuthenticationService.registerClient(client, responseToast) : responseToast('Please fill out remaning fields', 'warning')
+        valid ? AuthenticationService.registerReviewer(client, responseToast) : responseToast('Please fill out remaning fields', 'warning')
       })
   }
+  
+  // Handles file change
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e?.target?.files;
+    if (files) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setClient({ ...client, avatar: reader.result?.toString() ?? "" });
+      });
+      reader.readAsDataURL(files[0]);
+    }
+  };
+
 
   return (
     <Flex
@@ -100,9 +127,21 @@ export default function RegisterClient() {
           boxShadow={'lg'}
           p={8}>
           <Stack spacing={4}>
+            <FormControl id="firstName" isInvalid={errors.firstName}>
+              <FormLabel>First name</FormLabel>
+              <Input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'firstName')}/>
+            </FormControl>
+            <FormControl id="lastName" isInvalid={errors.lastName}>
+              <FormLabel>Last name</FormLabel>
+              <Input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'lastName')}/>
+            </FormControl>
             <FormControl id="username" isInvalid={errors.username}>
               <FormLabel>Username</FormLabel>
               <Input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'username')}/>
+            </FormControl>
+            <FormControl id="jmbg" isInvalid={errors.username}>
+              <FormLabel>JMBG</FormLabel>
+              <Input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'jmbg')}/>
             </FormControl>
             <FormControl id="email" isInvalid={errors.email}>
               <FormLabel>Email address</FormLabel>
@@ -123,6 +162,13 @@ export default function RegisterClient() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
+            <FormControl id="avatar" isInvalid={errors.avatar}>
+              <FormLabel>Avatar</FormLabel>
+              <Input 
+                type="file"
+                accept=".jpeg, .png, .jpg"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeFile(event)}/>
+            </FormControl>
             <Stack spacing={10} pt={2}>
             <Button
               loadingText="Submitting"
@@ -137,6 +183,7 @@ export default function RegisterClient() {
               Sign up
             </Button>
           </Stack>
+          
             <Stack pt={6}>
               <Text align={'center'}>
                 Already a user? <Link color={'green.400'} href="/login">Login</Link>

@@ -57,7 +57,11 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
 const CriticReviews = () => {
   const [game, setGame] = useState<Games.GameData>()
   const [latestPost, setLatestPost] = useState<Blog.Post>({
-      author: '',
+      author: {
+          email: '',
+          name: '',
+          avatar: '',
+      },
       title: '',
       text: '',
       game: game,
@@ -67,11 +71,15 @@ const CriticReviews = () => {
       comments: []
       }
     )
-  const [posts, setPosts] = useState<Array<Blog.Post>>([])
+  const [postResponse, setPostResponse] = useState<Blog.PostResponse>({
+        totalPages: 1,
+        currentPage: 1,
+        posts: []
+  })
 
   useEffect(() => {
     getReviewerPosts()
-    .then(res => setPosts(res.data))
+    .then((res: any)=> setPostResponse(res.data))
     getLatestReviewerPost()
     .then((res:any) => setLatestPost(res.data))
   }, [])
@@ -138,7 +146,7 @@ const CriticReviews = () => {
             fontSize="lg">
               {latestPost.text}
           </Text>
-          <BlogAuthor name={latestPost.author} date={new Date(latestPost.createdAt)} avatar={latestPost.avatar} /> 
+          <BlogAuthor name={latestPost.author.name} date={new Date(latestPost.createdAt)} avatar={latestPost.author.avatar} /> 
         </Box>
       </Box>
       <Heading as="h2" marginTop="5">
@@ -146,9 +154,8 @@ const CriticReviews = () => {
       </Heading> 
       <Divider marginTop="5" />
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacingX={6}>
-        {posts.length < 1 ? <Spinner size='xl' /> : (
-          posts?.map(data => {
-            console.log(data)
+        {postResponse.posts.length < 1 ? <Spinner size='xl' /> : (
+          postResponse.posts?.map(data => {
             return ( <PostCard post={data} /> )
             })
           )

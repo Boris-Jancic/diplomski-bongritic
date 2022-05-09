@@ -16,14 +16,19 @@ export default function GameReview() {
     const [game, setGame] = useState<Games.GameData>()
     const [post, setPost] = useState<Blog.Post>(
         {
-        author: user.email,
-        title: '',
-        text: '',
-        grade: 1,
-        game: game,
-        avatar: '',
-        createdAt: '',
-        comments: []}
+            author: {
+                email: user.email,
+                name: user.name,
+                avatar: user.avatar,
+            },
+            title: '',
+            text: '',
+            grade: 1,
+            game: game,
+            avatar: '',
+            createdAt: '',
+            comments: []
+        }
     )
 
     useEffect(() => {
