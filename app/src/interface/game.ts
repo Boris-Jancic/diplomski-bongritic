@@ -153,12 +153,35 @@ export module Games {
         data: any;
         results: Game[];
         genres: Genre[];
+        developers: Developer[];
+        publishers: Publisher[];
+        parent_platforms: ParentPlatform[];
+        stores: Store[]
         seo_title: string;
+        released: string;
+        website: string;
+        tags: Tag[]
         name: string;
         background_image: string;
         background_image_additional: string;
         description: string;
         description_raw: string;
+    }
+
+    export interface Developer {
+        id: number;
+        name: string;
+        slug: string;
+        games_count: number;
+        image_background: string;
+    }
+
+    export interface Publisher {
+        id: number;
+        name: string;
+        slug: string;
+        games_count: number;
+        image_background: string;
     }
 
 }

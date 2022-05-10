@@ -14,20 +14,17 @@ export default function GameReview() {
     const toast = useToast()
     const [user, setUser] = useRecoilState(authAtom);
     const [game, setGame] = useState<Games.GameData>()
-    const [post, setPost] = useState<Blog.Post>(
+    const [post, setPost] = useState<Blog.CreatePost>(
         {
-            author: {
-                email: user.email,
-                name: user.name,
-                avatar: user.avatar,
-            },
-            title: '',
-            text: '',
-            grade: 1,
             game: game,
-            avatar: '',
-            createdAt: '',
-            comments: []
+            comment: {
+                title: '',
+                author: user.name,
+                avatar: user.avatar,
+                text: '',
+                grade: 0,
+                date: '',
+            },
         }
     )
 
@@ -36,33 +33,36 @@ export default function GameReview() {
         .then(response => setGame(response.data))
     }, [])
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: string) => {
-        const postChanged = {...post};
-        //@ts-ignore
-        postChanged[prop] = e.target.value;
-        setPost(postChanged)
+    const inputHandlerSlider = (grade: number) => {
+        post.comment.grade = grade
     }
 
-    const inputHandlerSlider = (grade: number) => {
-        post.grade = grade
+    const titleChangeHandler = (title: string) => {
+        post.comment.title = title
+    }
+
+    const textChangeHandler = (text: string) => {
+        post.comment.text = text 
     }
 
     const handleSubmit = async () => {
         post.game = game
         console.log(post)
+
         await postReviewerPost(post)
-        .then(() => window.location.assign('review/success'))
+        .then(response => console.log(response))
+        // .then(() => window.location.assign('review/success'))
 
         .catch(error => error.response)
         .then(payload => payload.data)
-        .then(data => data.messages?.map((message: String) => {
+        .then(data => {
             toast({
-                title: message,
+                title: data.message,
                 status: 'error',
                 position: 'bottom',
                 isClosable: true,
             })
-        }))
+        })
     }
 
     return (
@@ -82,12 +82,12 @@ export default function GameReview() {
             <Center>
                 <FormControl width={{ base: '90%', md: '80%', lg: '60%' }}>
                     <FormLabel htmlFor='title'>Title</FormLabel>
-                    <Input type="text" id='title' onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'title')}/>
+                    <Input type="text" id='title' onChange={(event: React.ChangeEvent<HTMLInputElement>) => titleChangeHandler(event.target.value)}/>
                     <FormLabel htmlFor='text'>Review text</FormLabel>
                     <Textarea
                         id='text' 
                         //@ts-ignore
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'text')} />
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => textChangeHandler(event.target.value)} />
                         
                     <FormLabel htmlFor='grade'>Grade</FormLabel>
                     

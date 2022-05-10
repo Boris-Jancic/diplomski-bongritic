@@ -19,6 +19,7 @@ import NotFound from "./layout/notFound"
 import GamePreview from "./layout/gamePreview"
 import GameReview from "./layout/gameReview"
 import SuccessfullPost from "./layout/succesFullBlogPost"
+import PostView from "./layout/postView"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -40,6 +41,7 @@ export const App = () => (
           <Route path="/games/preview" element={<GamePreview />} />
           <Route path="/games/review" element={<GameReview />} />
           <Route path="/games/review/success" element={<SuccessfullPost />} />
+          <Route path="/post/view" element={<PostView />} />
 
         </Routes>
 

@@ -47,9 +47,10 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
         src={props.avatar}
         alt={`Avatar of ${props.name}`}
       />
-      <Text fontWeight="medium">{props.name}</Text>
+      <Text as={"a"} fontWeight="medium"></Text>
+      <Link href="reviewer">{props.name}</Link>
       <Text>—</Text>
-      <Text>{props.date.toLocaleDateString()}</Text>
+      <Text>{props.date?.toLocaleDateString()}</Text>
     </HStack>
   );
 };
@@ -57,20 +58,15 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
 const CriticReviews = () => {
   const [game, setGame] = useState<Games.GameData>()
   const [latestPost, setLatestPost] = useState<Blog.Post>({
-      author: {
-          email: '',
-          name: '',
-          avatar: '',
-      },
-      title: '',
-      text: '',
+      _id: '',
       game: game,
       grade: 1,
       avatar: '',
       createdAt: '',
-      comments: []
-      }
-    )
+      reviewerComments: [],
+      userComments: []
+    }
+  )
   const [postResponse, setPostResponse] = useState<Blog.PostResponse>({
         totalPages: 1,
         currentPage: 1,
@@ -84,6 +80,7 @@ const CriticReviews = () => {
     .then((res:any) => setLatestPost(res.data))
   }, [])
   
+  console.log(postResponse.posts)
 
   return (
     <Container maxW={'7xl'} p="12">
@@ -136,17 +133,10 @@ const CriticReviews = () => {
           </Stack>
           <Heading marginTop="1">
             <Link textDecoration="none" _hover={{ textDecoration: 'none' }}>
-              {latestPost.title}
+              {latestPost.game?.name}
             </Link>
           </Heading>
-          <Text
-            as="p"
-            marginTop="2"
-            color={useColorModeValue('gray.700', 'gray.200')}
-            fontSize="lg">
-              {latestPost.text}
-          </Text>
-          <BlogAuthor name={latestPost.author.name} date={new Date(latestPost.createdAt)} avatar={latestPost.author.avatar} /> 
+          <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} /> 
         </Box>
       </Box>
       <Heading as="h2" marginTop="5">
@@ -167,28 +157,11 @@ const CriticReviews = () => {
       <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
         <Heading as="h2">What we write about</Heading>
         <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
-          pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
-          imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
-          sapien. Suspendisse placerat vulputate posuere. Curabitur neque
-          tortor, mattis nec lacus non, placerat congue elit.
-        </Text>
-        <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
-          pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
-          imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
-          sapien. Suspendisse placerat vulputate posuere. Curabitur neque
-          tortor, mattis nec lacus non, placerat congue elit.
-        </Text>
-        <Text as="p" fontSize="lg">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          condimentum quam arcu, eu tempus tortor molestie at. Vestibulum
-          pretium condimentum dignissim. Vestibulum ultrices vitae nisi sed
-          imperdiet. Mauris quis erat consequat, commodo massa quis, feugiat
-          sapien. Suspendisse placerat vulputate posuere. Curabitur neque
-          tortor, mattis nec lacus non, placerat congue elit.
+          Gaming and writing don’t have much in common, do they?
+          But, if you take a closer look, you’ll see the bond that ties the two.
+          Our team hasn’t seen the bond that ties gaming and writing until the couple of us at Bongritic have realized that we love writing down notes and reviews of the games we played.
+          Some were fascinated by the intricacies behind the development, some were awed by the stories, while some fell in love with the designs, and as you can imagine, the list goes on.
+          It’s this exact passion for games and spending hours talking and writing about them that’s been the starting point of our team–without it, nothing would be worth it.
         </Text>
       </VStack>
     </Container>

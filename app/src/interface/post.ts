@@ -9,25 +9,35 @@ export module Blog {
     }
 
     export interface Post {
-        author: {
-            email: string,
-            name: string;
-            avatar: string;
-        };
-        title: string;
-        text: string;
+        _id: string;
         grade: number;
         game?: Games.GameData;
-        comments: Comment[];
+        reviewerComments: ReviewerComment[];
+        userComments: UserComment[];
         avatar: string;
         createdAt: string;
     }
 
-    export interface Comment {
+    export interface CreatePost {
+        game?: Games.GameData;
+        comment: ReviewerComment;
+    }
+
+    export interface ReviewerComment {
         author: string;
+        avatar: string;
+        title: string;
         text: string;
         grade: number;
-        comments: Comment[]
+        date: string;
+    }
+
+    export interface UserComment {
+        author: string;
+        title: string;
+        text: string;
+        grade: number;
+        date: string;
     }
 
     export interface IBlogTags {
@@ -36,9 +46,9 @@ export module Blog {
     }
 
     export interface BlogAuthorProps {
-        date: Date;
-        avatar: string;
-        name: string;
+        date?: Date;
+        avatar?: string;
+        name?: string;
     }
 
     export interface PostCardData {
