@@ -184,4 +184,23 @@ export module Games {
         image_background: string;
     }
 
+    export interface GameTrailer {
+        480: string;
+        max: string;
+    }
+
+    export interface TrailerResult {
+        id: number;
+        name: string;
+        preview: string;
+        data: GameTrailer;
+    }
+
+    export interface GameMovies {
+        count: number;
+        next?: any;
+        previous?: any;
+        results: TrailerResult[];
+    }
+
 }

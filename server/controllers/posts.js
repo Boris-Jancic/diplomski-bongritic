@@ -49,7 +49,6 @@ export const createPost = async (req, res) => {
         grade: req.body.comment.grade,
         date: new Date().toLocaleDateString()
     }
-    console.log(comment)
     try {
         if (await Post.exists({'game.id': req.body.game.id}).exec() !== null) {        
             const existingPost = await Post.findOne({'game.id': req.body.game.id}).exec()
@@ -60,6 +59,7 @@ export const createPost = async (req, res) => {
             res.status(201).send(existingPost)
         }
         newPost.reviewerComments.push(comment)
+        newPost.game = req.body.game
         newPost.save()
         res.status(201).send(newPost)
     } catch (error) {

@@ -22,6 +22,7 @@ import {
   GridItem,
   Grid,
   Spinner,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
@@ -31,18 +32,29 @@ import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
 import { BlogAuthor } from './criticReviews';
 import ReviewCard from '../components/reviewCard';
+import { getGameTrailers } from '../api/games/gameService';
 
 export default function PostView() {
   const queryParams = new URLSearchParams(window.location.search);
   const id = queryParams.get('id');
   const [post, setPost] = useState<Blog.Post>()
+  const [trailers, setTrailers] = useState<Array<Games.TrailerResult>>()
 
   useEffect(() => { 
     getReviewerPost(String(id))
     .then(response => setPost(response.data))
+
   }, [])
 
-  console.log(post)
+  useEffect(() => {
+    if(post?.game) {
+      getGameTrailers(post.game.id)
+      .then(response => response.data)
+      .then((data: Games.GameMovies) => setTrailers(data.results))
+    }
+  }, [post])
+  
+console.log(trailers)
 
   return (
     <Container maxW={'7xl'}>
@@ -86,7 +98,7 @@ export default function PostView() {
               templateRows='repeat(1, 1fr)'
               templateColumns='repeat(2, 1fr)'
               gap={10}>
-                <GridItem>
+                <GridItem rowSpan={1} colSpan={1}>
                   <List spacing={1} textAlign={[ 'left' ]}>
                     <ListItem>
                       <Text as={'span'} fontWeight={'bold'}>
@@ -131,7 +143,8 @@ export default function PostView() {
                     </ListItem>
                   </List>
                 </GridItem>
-                <GridItem>
+
+                <GridItem rowSpan={1} colSpan={1}>
                   <Text fontSize="sm">
                     {post?.game?.description_raw}
                   </Text>
@@ -139,6 +152,25 @@ export default function PostView() {
             </Grid>
             
           </Box>
+          
+            <Grid templateColumns='repeat(5, 1fr)' gap={6}>
+                {!trailers ? <Text>Can't load trailers</Text> : (
+                  trailers.map(trailer => {
+                    return ( // This video will have equal sides
+                      <GridItem>
+                        <AspectRatio maxW='1000px' ratio={2}>
+                          <iframe
+                            title={trailer.name}
+                            src={trailer.data[480]}
+                            allowFullScreen
+                          />
+                        </AspectRatio> 
+                      </GridItem>
+                      )
+                    })
+                  )
+                }
+            </Grid>
           <Divider />
 
           <Grid h='100%'
@@ -164,28 +196,6 @@ export default function PostView() {
               </Heading>
             </GridItem>
           </Grid>
-          {/* <Button
-            rounded={'none'}
-            w={'full'}
-            mt={8}
-            size={'md'}
-            py={'7'}
-            bg={useColorModeValue('gray.900', 'gray.50')}
-            color={useColorModeValue('white', 'gray.900')}
-            textTransform={'uppercase'}
-            _hover={{
-              transform: 'translateY(2px)',
-              boxShadow: 'lg',
-            }}>
-            Leave a comment
-          </Button> */}
-
-          {/* <Stack direction="row" alignItems="center" justifyContent={'center'}>
-        <BlogAuthor
-            name={post?.author.name}
-            avatar={post?.author.avatar}
-            date={new Date(String(post?.createdAt))} />
-          </Stack> */}
         </Stack>
       </SimpleGrid>
     </Container>

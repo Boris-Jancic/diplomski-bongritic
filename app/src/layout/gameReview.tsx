@@ -47,11 +47,10 @@ export default function GameReview() {
 
     const handleSubmit = async () => {
         post.game = game
-        console.log(post)
 
         await postReviewerPost(post)
         .then(response => console.log(response))
-        // .then(() => window.location.assign('review/success'))
+        .then(() => window.location.assign('review/success'))
 
         .catch(error => error.response)
         .then(payload => payload.data)
