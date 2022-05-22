@@ -20,6 +20,8 @@ import GamePreview from "./layout/gamePreview"
 import GameReview from "./layout/gameReview"
 import SuccessfullPost from "./layout/succesFullBlogPost"
 import PostView from "./layout/postView"
+import CriticCommentView from "./layout/criticCommentView"
+import ReviewerComments from "./layout/reviewerComments"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -31,6 +33,7 @@ export const App = () => (
         <VStack spacing={8}>
 
         <Routes>
+
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -42,6 +45,8 @@ export const App = () => (
           <Route path="/games/review" element={<GameReview />} />
           <Route path="/games/review/success" element={<SuccessfullPost />} />
           <Route path="/post/view" element={<PostView />} />
+          <Route path="/post/review/critic" element={<CriticCommentView />} />
+          <Route path="/critic/reviews" element={<ReviewerComments />} />
 
         </Routes>
 
