@@ -1,22 +1,21 @@
 import axios from "axios";
 import {TokenService} from "./tokenService";
 import {AuthenticationService} from "../auth/authService";
-import { useSetRecoilState } from "recoil";
-import { authAtom } from "../../state/auth";
 
 const AxiosClient = axios.create();
 
 // If the user is logged in attach the token for every api call
 AxiosClient.interceptors.request.use(function success(config) {
-    const token = TokenService.getToken();
-    if (token) {
+    const user = TokenService.getUserFromToken()
+    if (user) {
         if (TokenService.didTokenExpire()) {
             alert("Token expired, log in again");
             AuthenticationService.logout();
             return false;
         }
         //@ts-ignore
-        config.headers["Authorization"] = "Bearer " + token;
+        config.headers["Authorization"] = user.role;
+
     }
     return config;
 });

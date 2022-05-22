@@ -1,4 +1,5 @@
 import jwtDecode from "jwt-decode";
+import { Bearer } from "../../interface/tokenBearer";
 
 export const TokenService = {
     getToken,
@@ -10,19 +11,19 @@ export const TokenService = {
 };
 
 function getToken() : string | null{
-    return localStorage.getItem("token");
+    return localStorage.getItem("user");
 }
 
-function getUserFromToken() : string | null{
-    return jwtDecode(JSON.parse(localStorage.getItem("token") || '{}'));
+function getUserFromToken() : Bearer {
+    return JSON.parse(localStorage.getItem("user") || '{}');
 }
 
 function setToken(value: string) {
-    localStorage.setItem("token", value);
+    localStorage.setItem("user", value);
 }
 
 function removeToken() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
 }
 
 function decodeToken(token: string) {
