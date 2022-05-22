@@ -48,13 +48,15 @@ export default function PostCard(props: {post: Blog.Post}) {
                 <Stack direction='row' marginTop="2">
                     {props.post.game?.genres.map((item: Games.Genre) => <Badge colorScheme='green'>{item.name}</Badge>)}
                 </Stack>
-                <Heading fontSize="xl" marginTop="2">
-                    <Text as="h6" fontSize="lg" marginTop="2" color='cadetblue'>
+                <Heading fontSize="x-large" marginTop="2">
+                    <Text color='cadetblue'>
                         {props.post.game?.name}
                     </Text>
                 </Heading>
+                <Divider width={"50%"} m={5} />
                 <BlogAuthor
                     name={props.post.reviewerComments.at(-1)?.author}
+                    email={props.post.reviewerComments.at(-1)?.authorEmail}
                     avatar={props.post.reviewerComments.at(-1)?.avatar}
                     date={new Date(String(props.post.reviewerComments.at(-1)?.date))}
                 />

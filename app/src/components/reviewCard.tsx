@@ -1,7 +1,18 @@
 import { Flex, useColorModeValue, Box, chakra, Link, Image, Text } from "@chakra-ui/react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { getRecoil, setRecoil } from "recoil-nexus";
 import { Blog } from "../interface/post";
+import { criticCommentAtom } from "../state/criticComment";
 
 export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
+  const [ay, setCriticComment] = useRecoilState(criticCommentAtom);
+
+  const handleReadMore = () => {
+    setCriticComment(props.comment.author)
+    localStorage.setItem('criticComment', JSON.stringify(props.comment))
+    // window.location.assign(`review/critic?=${props.comment.author}&game=${props.comment}`)
+  }
+
   return (
     <Flex
       p={25}
@@ -28,7 +39,7 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
           <Text
             py={3}
             px={3}
-            bg="gray.600"
+            bg="green.600"
             color="gray.100"
             fontSize="xl"
             fontWeight="700"
@@ -39,23 +50,20 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
         </Flex>
 
         <Box mt={2}>
-          <Link
+          <Text
             py={1}
             fontSize=""
             rounded="md"
             color={useColorModeValue("gray.700", "white")}
             fontWeight="700"
-            _hover={{
-              color: useColorModeValue("gray.600", "gray.200"),
-              textDecor: "underline",
-            }}
           >
               {props.comment.title}
-          </Link>
+          </Text>
           <Text mt={1} 
             fontSize="md"
             rounded="md"
-            color={useColorModeValue("gray.600", "gray.300")}>
+            color={useColorModeValue("gray.600", "gray.300")}
+            noOfLines={3}>
             {props.comment.text}
           </Text>
         </Box>
@@ -65,6 +73,8 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
           <Link
             color={useColorModeValue("brand.600", "brand.400")}
             _hover={{ textDecor: "underline" }}
+            onClick={() => handleReadMore()}
+            href={`/post/review/critic?=${props.comment.author}&game=${props.comment}`}
           >
             Read more
           </Link>
@@ -81,6 +91,7 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
               alt="avatar"
             />
             <Link
+              href={`/critic/reviews?name=${props.comment.author}&email=${props.comment.authorEmail}`}
               color={useColorModeValue("gray.700", "gray.200")}
               fontWeight="700"
               cursor="pointer"

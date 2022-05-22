@@ -33,17 +33,19 @@ import { Games } from '../interface/game';
 import { BlogAuthor } from './criticReviews';
 import ReviewCard from '../components/reviewCard';
 import { getGameTrailers } from '../api/games/gameService';
+import UserCard from '../components/userCard';
 
 export default function PostView() {
   const queryParams = new URLSearchParams(window.location.search);
   const id = queryParams.get('id');
   const [post, setPost] = useState<Blog.Post>()
   const [trailers, setTrailers] = useState<Array<Games.TrailerResult>>()
+  const reviewerGrade: number = 0
+  const userGrade: number = 0
 
   useEffect(() => { 
     getReviewerPost(String(id))
     .then(response => setPost(response.data))
-
   }, [])
 
   useEffect(() => {
@@ -54,8 +56,6 @@ export default function PostView() {
     }
   }, [post])
   
-console.log(trailers)
-
   return (
     <Container maxW={'7xl'}>
       <SimpleGrid
@@ -152,11 +152,12 @@ console.log(trailers)
             </Grid>
             
           </Box>
-          
-            <Grid templateColumns='repeat(5, 1fr)' gap={6}>
+            <Heading>Trailers</Heading>
+            <Grid templateColumns='repeat(4, 1fr)' gap={6}>
                 {!trailers ? <Text>Can't load trailers</Text> : (
+                  trailers.length == 0 ?  <GridItem rowSpan={4}><Text>This game doesen't have any trailers that we could fetch</Text></GridItem> : 
                   trailers.map(trailer => {
-                    return ( // This video will have equal sides
+                    return (
                       <GridItem>
                         <AspectRatio maxW='1000px' ratio={2}>
                           <iframe
@@ -182,8 +183,9 @@ console.log(trailers)
               <Heading as='h3' size='lg'>
                 Critic reviews
                 {!post?.reviewerComments ? <Spinner size='xl' /> : (
-                  post?.reviewerComments.map(comment => {
-                    return ( <ReviewCard comment={comment} /> )
+                  post.reviewerComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text></GridItem> : 
+                  post.reviewerComments.map(comment => {
+                    return ( <ReviewCard key={comment._id} comment={comment} /> )
                     })
                   )
                 }
@@ -193,6 +195,13 @@ console.log(trailers)
             <GridItem>
               <Heading as='h3' size='lg'>
                 Users reviews
+                {!post?.userComments ? <Spinner size='xl' /> : (
+                  post.userComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any user reviews yet</Text></GridItem> : 
+                  post.userComments.map(comment => {
+                    return ( <UserCard key={comment._id} comment={comment} /> )
+                    })
+                  )
+                }
               </Heading>
             </GridItem>
           </Grid>

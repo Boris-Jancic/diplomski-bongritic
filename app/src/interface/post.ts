@@ -25,19 +25,21 @@ export module Blog {
 
     export interface ReviewerComment {
         author: string;
+        authorEmail: string;
         avatar: string;
         title: string;
         text: string;
         grade: number;
         date: string;
+        _id: string;
     }
 
     export interface UserComment {
         author: string;
-        title: string;
         text: string;
         grade: number;
         date: string;
+        _id: string;
     }
 
     export interface IBlogTags {
@@ -49,6 +51,7 @@ export module Blog {
         date?: Date;
         avatar?: string;
         name?: string;
+        email?: string;
     }
 
     export interface PostCardData {

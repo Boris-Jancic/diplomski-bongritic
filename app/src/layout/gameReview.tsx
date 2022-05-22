@@ -11,22 +11,24 @@ import { error } from 'console';
 export default function GameReview() {
     const queryParams = new URLSearchParams(window.location.search);
     const id = queryParams.get('id');
-    const toast = useToast()
+    const toast = useToast();
     const [user, setUser] = useRecoilState(authAtom);
-    const [game, setGame] = useState<Games.GameData>()
+    const [game, setGame] = useState<Games.GameData>();
     const [post, setPost] = useState<Blog.CreatePost>(
         {
             game: game,
             comment: {
                 title: '',
                 author: user.name,
+                authorEmail: user.email,
                 avatar: user.avatar,
                 text: '',
                 grade: 0,
                 date: '',
+                _id: ''
             },
         }
-    )
+    );
 
     useEffect(() => {
         getGame(Number(id))
@@ -47,7 +49,6 @@ export default function GameReview() {
 
     const handleSubmit = async () => {
         post.game = game
-
         await postReviewerPost(post)
         .then(response => console.log(response))
         .then(() => window.location.assign('review/success'))

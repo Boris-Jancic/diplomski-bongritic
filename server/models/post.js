@@ -6,6 +6,7 @@ const postSchema = mongoose.Schema({
     reviewerComments: [
         {
             author: String,
+            authorEmail: String,
             avatar: String,
             title: String,
             text: String,
@@ -16,6 +17,7 @@ const postSchema = mongoose.Schema({
     userComments: [
         {
             author: String,
+            authorEmail: String,
             text: String,
             grade: Number,
             date: String
