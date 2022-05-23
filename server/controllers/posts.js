@@ -20,6 +20,26 @@ export const getPosts = async (req, res) => {
     }
 }
 
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+export const getPostByGameName = async (req, res) => {  
+    const { page = 1, limit = 10, gameName = '' } = req.query
+    try {
+        const regex = new RegExp(escapeRegex(gameName), 'gi');
+        const count = await Post.countDocuments()
+        const post = await Post.find({'game.name': regex})
+        res.status(200).json({
+            currentPage: page,
+            totalPages: Math.ceil(count / limit),
+            posts: post
+        });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
 export const getLatestPost = async (req, res) => { 
     try {
         const post = await Post.findOne().sort({"createdAt": -1}) 
@@ -31,8 +51,6 @@ export const getLatestPost = async (req, res) => {
 
 export const getPost = async (req, res) => { 
     const { id } = req.query
-    const { authorization } = req.headers 
-    if (authorization !== "REVIEWER") res.status(403).json({ message: error.message });
     try {
         const post = await Post.findById(id) 
         res.status(200).json(post);

@@ -6,7 +6,9 @@ const BASE_URL = process.env.REACT_APP_API_KEY
 
 export const postReviewerPost = async (post: Blog.CreatePost) => await AxiosClient.post<Blog.CreatePost>(`${BASE_URL}/posts`, post)
 
-export const getReviewerPosts = async () => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts`)
+export const getPosts = async (page: number, limit: number) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts?page=${page}&limit=${limit}`)
+
+export const getPostsByGame = async (page: number, limit: number, gameName: string) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts/game?page=${page}&limit=${limit}&gameName=${gameName}`)
 
 export const getReviewerPost = async (id: string) => await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/one?id=${id}`)
 

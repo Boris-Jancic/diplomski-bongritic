@@ -15,28 +15,14 @@ import {
   Spinner,
   Stack,
   Badge,
+  Input,
 } from '@chakra-ui/react';
-import { TokenService } from '../api/client/tokenService';
 import { Blog } from '../interface/post';
 import PostCard from '../components/postCard';
 import Paginator from '../components/pagination';
-import { getLatestReviewerPost, getReviewerPosts } from '../api/blogs/blogService';
+import { getLatestReviewerPost, getPosts, getPostsByGame } from '../api/blogs/blogService';
 import { Games } from '../interface/game';
-
-
-export const BlogTags: React.FC<Blog.IBlogTags> = (props) => {
-  return (
-    <HStack spacing={2} marginTop={props.marginTop}>
-      {props.tags.map((tag) => {
-        return (
-          <Tag size={'md'} variant="solid" colorScheme="green" key={tag}>
-            {tag}
-          </Tag>
-        );
-      })}
-    </HStack>
-  );
-};
+import { debounce } from 'lodash';
 
 export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
   return (
@@ -55,6 +41,8 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
 };
 
 const CriticReviews = () => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(10)
   const [game, setGame] = useState<Games.GameData>()
   const [latestPost, setLatestPost] = useState<Blog.Post>({
       _id: '',
@@ -73,17 +61,28 @@ const CriticReviews = () => {
   })
 
   useEffect(() => {
-    getReviewerPosts()
+    getPosts(1, 5)
     .then((res: any)=> setPostResponse(res.data))
     getLatestReviewerPost()
-    .then((res:any) => setLatestPost(res.data))
+    .then((res: any) => setLatestPost(res.data))
   }, [])
   
-  console.log(postResponse.posts)
+  useEffect(() => {
+    console.log(currentPage)
+  }, [currentPage, totalPages])
+
+  const debouncedSearch = debounce(async (criteria: string) => {
+    if (criteria === "") { getPosts(1, 5).then((res: any)=> setPostResponse(res.data)) }
+    else getPostsByGame(1, 5, criteria).then((response) => response.data).then((data: any) => setPostResponse(data))
+  }, 500);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value);
+  }
 
   return (
     <Container maxW={'7xl'} p="12">
-      <Heading as="h1">LATEST REVIEW</Heading>
+      <Heading as="h1" marginBottom={100}>LATEST REVIEW</Heading>
       <Box
         marginTop={{ base: '1', sm: '5' }}
         display="flex"
@@ -128,7 +127,7 @@ const CriticReviews = () => {
           justifyContent="center"
           marginTop={{ base: '3', sm: '0' }}>
           <Stack direction='row' marginTop="2">
-            {latestPost?.game?.genres.map((item: Games.Genre) => <Badge colorScheme='green'>{item.name}</Badge>)}
+            {latestPost?.game?.genres.map((item: Games.Genre) => <Badge key={item.id} colorScheme='green'>{item.name}</Badge>)}
           </Stack>
           <Heading marginTop="1">
             <Link textDecoration="none" _hover={{ textDecoration: 'none' }}>
@@ -138,20 +137,26 @@ const CriticReviews = () => {
           <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} /> 
         </Box>
       </Box>
-      <Heading as="h2" marginTop="5">
+      <Divider marginTop={100} />
+      <Heading as="h2" marginTop={5}>
         Other reviews
-      </Heading> 
-      <Divider marginTop="5" />
+      </Heading>
+      <Text mb='8px'>Search for a game</Text>
+      <Input
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
+          placeholder='Search'
+          size='sm'
+      />
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacingX={6}>
         {postResponse.posts.length < 1 ? <Spinner size='xl' /> : (
           postResponse.posts?.map(data => {
-            return ( <PostCard post={data} /> )
+            return ( <PostCard key={data._id} post={data} /> )
             })
           )
         }
       </SimpleGrid>
 
-      <Paginator />
+      <Paginator currentPage={currentPage} totalPages={10} setCurrentPage={setCurrentPage} />
       
       <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
         <Heading as="h2">What we write about</Heading>
