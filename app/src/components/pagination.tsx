@@ -1,8 +1,12 @@
 import React from "react";
-import { chakra, Flex, useColorModeValue, Icon } from "@chakra-ui/react";
+import { chakra, Flex, useColorModeValue, Icon, Button } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-export default function Paginator () {
+export default function Paginator (props: {
+  currentPage: number,
+  totalPages: number,
+  setCurrentPage: any}
+  ) {
   const PagButton = (props: any) => {
     const activeStyle = {
       color: useColorModeValue("green", "gray.200"),
@@ -25,6 +29,16 @@ export default function Paginator () {
       </chakra.button>
     );
   };
+
+
+  const onClickPrevious = () => {
+    if (props.currentPage > 1) props.setCurrentPage(props.currentPage - 1)
+  }
+  
+  const onClickNext = () => {
+    if (props.currentPage <= props.totalPages) props.setCurrentPage(props.currentPage + 1)
+  }
+
   return (
     <Flex
       p={50}
@@ -34,21 +48,21 @@ export default function Paginator () {
     >
       <Flex>
         <PagButton>
-          <Icon
+          <Icon  
+            onClick={onClickPrevious}
             as={IoIosArrowBack}
             color={useColorModeValue("gray.700", "gray.200")}
             boxSize={4}
           />
         </PagButton>
         <PagButton p>1</PagButton>
-        <PagButton p active>
-          2
-        </PagButton>
+        <PagButton p active> 2</PagButton>
         <PagButton p>3</PagButton>
         <PagButton p>4</PagButton>
         <PagButton p>5</PagButton>
-        <PagButton>
+        <PagButton onClick={() => onClickNext}>
           <Icon
+            onClick={onClickNext}
             as={IoIosArrowForward}
             color={useColorModeValue("gray.700", "gray.200")}
             boxSize={4}
