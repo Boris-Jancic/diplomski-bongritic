@@ -1,6 +1,6 @@
 import express from "express"
 import { check, validationResult, header } from "express-validator";
-import { createPost, getLatestPost, getPosts, getPost, getAverageGrades } from "../controllers/posts.js"
+import { createPost, getLatestPost, getPosts, getPost, getAverageGrades, getPostByGameName } from "../controllers/posts.js"
 
 const router = express.Router()
 
@@ -14,6 +14,6 @@ router.get('/latest', getLatestPost)
 
 router.get('/average/reviewers/grade', getAverageGrades)
 
-// router.get('/average/users/grade', getAverageGrades)
+router.get('/game', getPostByGameName)
 
 export default router
