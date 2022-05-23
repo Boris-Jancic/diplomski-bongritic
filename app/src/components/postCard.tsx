@@ -6,22 +6,15 @@ import {
   Image,
   Text,
   Divider,
-  HStack,
-  Tag,
   Wrap,
   WrapItem,
-  SpaceProps,
-  useColorModeValue,
-  Container,
-  VStack,
-  SimpleGrid,
   Badge,
   Stack,
 } from '@chakra-ui/react';
 import React from 'react'
 import { Games } from '../interface/game';
 import { Blog } from '../interface/post';
-import { BlogAuthor, BlogTags } from '../layout/criticReviews'
+import { BlogAuthor } from '../layout/criticReviews'
 
 export default function PostCard(props: {post: Blog.Post}) {
     return (
@@ -46,7 +39,7 @@ export default function PostCard(props: {post: Blog.Post}) {
                 </Link>
                 </Box>
                 <Stack direction='row' marginTop="2">
-                    {props.post.game?.genres.map((item: Games.Genre) => <Badge colorScheme='green'>{item.name}</Badge>)}
+                    {props.post.game?.genres.map((item: Games.Genre) => <Badge key={item.slug} colorScheme='green'>{item.name}</Badge>)}
                 </Stack>
                 <Heading fontSize="x-large" marginTop="2">
                     <Text color='cadetblue'>
