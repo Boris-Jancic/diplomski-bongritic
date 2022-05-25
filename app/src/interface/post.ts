@@ -18,6 +18,12 @@ export module Blog {
         createdAt: string;
     }
 
+    export interface AverageGrades {
+        _id: string;
+        critic: number;
+        user: number;
+    }
+
     export interface CreatePost {
         game?: Games.GameData;
         comment: ReviewerComment;

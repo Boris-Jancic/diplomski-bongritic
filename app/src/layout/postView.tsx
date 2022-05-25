@@ -27,7 +27,7 @@ import {
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import React, { useEffect, useState } from 'react'
-import { getReviewerPost } from '../api/blogs/blogService';
+import { getCriticAverageGrade, getReviewerPost } from '../api/blogs/blogService';
 import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
 import { BlogAuthor } from './criticReviews';
@@ -40,8 +40,7 @@ export default function PostView() {
   const id = queryParams.get('id');
   const [post, setPost] = useState<Blog.Post>()
   const [trailers, setTrailers] = useState<Array<Games.TrailerResult>>()
-  const reviewerGrade: number = 0
-  const userGrade: number = 0
+  const [averageGrade, setAverageGrade] = useState<Blog.AverageGrades>()
 
   useEffect(() => { 
     getReviewerPost(String(id))
@@ -53,9 +52,13 @@ export default function PostView() {
       getGameTrailers(post.game.id)
       .then(response => response.data)
       .then((data: Games.GameMovies) => setTrailers(data.results))
+      getCriticAverageGrade(String(post._id))
+      .then(response => response.data)
+      .then((data: Blog.AverageGrades) => setAverageGrade(data))
     }
   }, [post])
   
+  console.log(averageGrade)
   return (
     <Container maxW={'7xl'}>
       <SimpleGrid
@@ -180,8 +183,24 @@ export default function PostView() {
             gap={10}>
             
             <GridItem>
-              <Heading as='h3' size='lg'>
-                Critic reviews
+              <Flex alignContent='center' alignItems='center'>
+                <Heading as='h3' size='lg'>
+                  Critic reviews
+                </Heading>
+
+                  <Text
+                    py={2}
+                    px={2}
+                    mx={15}
+                    bg={"green.400"}
+                    color="white"
+                    fontSize="xl"
+                    fontWeight="700"
+                    rounded="md"
+                  >
+                    {!averageGrade?.critic ? <>No user grades</> : (averageGrade?.critic)}
+                  </Text>
+              </Flex>
                 {!post?.reviewerComments ? <Spinner size='xl' /> : (
                   post.reviewerComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text></GridItem> : 
                   post.reviewerComments.map(comment => {
@@ -189,12 +208,28 @@ export default function PostView() {
                     })
                   )
                 }
-              </Heading>
             </GridItem>
 
             <GridItem>
-              <Heading as='h3' size='lg'>
-                Users reviews
+              <Flex alignContent='center' alignItems='center'>
+                <Heading as='h3' size='lg'>
+                  User reviews
+                </Heading>
+
+                  <Text
+                    py={2}
+                    px={2}
+                    mx={15}
+                    bg="green.600"
+                    color="white"
+                    fontSize="xl"
+                    fontWeight="700"
+                    rounded="md"
+                  >
+                    {!averageGrade?.user ? <>No user grades</> : (averageGrade?.user)}
+                  </Text>
+              </Flex>
+
                 {!post?.userComments ? <Spinner size='xl' /> : (
                   post.userComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any user reviews yet</Text></GridItem> : 
                   post.userComments.map(comment => {
@@ -202,7 +237,6 @@ export default function PostView() {
                     })
                   )
                 }
-              </Heading>
             </GridItem>
           </Grid>
         </Stack>

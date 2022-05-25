@@ -109,35 +109,24 @@ export const getReviewerComments = async (req, res) => {
 export const getAverageGrades = async (req, res) => {
     const { id } = req.query
     try {
-        const post = await Post.aggregate([
+        const grades = await Post.aggregate([
             {
-                $match:
-                    {
-                        _id: mongoose.Types.ObjectId(`${id}`)
-                    }
+                $match:{
+                    _id: mongoose.Types.ObjectId(`${id}`)
+                }
             },
             {
                 $unwind: "$reviewerComments"
             },
             {
                 $group:{
-                    _id:{
-                        "comment_id": "$reviewerComments.id",
-                        "title": "$reviewerComments.title",
-                        "grade": "$reviewerComments.grade",
-                    },
-                    avg_rating: {$avg:"reviewerComments.grade"}
-                }
-            },
-            {
-                $project:{
-                    "id": "$_id.rating_id",
-                    "title": "$_id.title",
-                    "avg_rating": "$avg_rating"  // avg_rating returns null, fix this
+                    _id: "$_id",
+                    critic: { $avg: "$reviewerComments.grade"},
+                    user: { $avg: "$userComments.grade"}
                 }
             }
         ])
-        res.status(200).json(post);
+        res.status(200).json(grades[0]);
     } catch (error) {
         console.log(error.message)
         res.status(404).json({ message: error.message });
