@@ -95,8 +95,28 @@ export const getReviewerComments = async (req, res) => {
     const { email } = req.query
     try {
         const post = await Post
-        .find({'reviewerComments':{"$elemMatch":{authorEmail: email}}}) // returns wrong comments, fix this
-        .select('reviewerComments') // returns the first comment of a array, this could be the wrong author
+        // .find({'reviewerComments':{"$elemMatch":{authorEmail: email}}})
+        // .populate({
+        //     "path": "reviewerComments.authorEmail",
+        //     "match": {"authorEmail": email}
+        // })
+        // returns wrong comments, fix this
+        .aggregate([
+            { $match: { reviewerComments :{"$elemMatch":{authorEmail: email}} } },
+            {
+                $project : {
+                    reviewerComments: {
+                        $filter: {
+                            input: "$reviewerComments",
+                            as: "comment",
+                            cond: {
+                                $eq: [ "$$comment.authorEmail", email ]
+                            }
+                        }
+                    },
+                }}
+        ])
+        // .select('reviewerComments') // returns the first comment of a array, this could be the wrong author
         .exec()
         console.log(post)
         res.status(200).json(post);
