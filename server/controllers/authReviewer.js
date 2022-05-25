@@ -12,8 +12,10 @@ export const loginReviewer = async (req, res) => {
         if (!reviewer) return res.status(404).json({ message: "Reviewer doesn't exist" });
 
         const isPasswordCorrect = await bcrypt.compare(password, reviewer.password);
-        
+
         if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
+
+        if (!reviewer.activated) return res.status(403).json({ message: "You are now allowed to use Bongritic" });
 
         const token = jwt.sign({ 
             email: email,

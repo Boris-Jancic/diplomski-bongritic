@@ -76,11 +76,11 @@ export default function Login() {
           <Heading fontSize={'2xl'}>Sign in to your account</Heading>
           <FormControl id="email" isInvalid={errors.email}>
             <FormLabel>Email address</FormLabel>
-            <Input type="email"  onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'email')}/>
+            <Input type="email"  onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputHandler(e, 'email')}/>
           </FormControl>
           <FormControl id="password" isInvalid={errors.password}>
             <FormLabel>Password</FormLabel>
-            <Input type="password" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'password')}/>
+            <Input type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputHandler(e, 'password')}/>
           </FormControl>
           <Stack spacing={6}>
             <Stack
@@ -89,7 +89,8 @@ export default function Login() {
               justify={'space-between'}>
               <Link color={'green.300'}>Forgot password?</Link>
             </Stack>
-            <Button colorScheme={'green'} variant={'solid'} onClick={() => handleLogin()}>
+            <Button colorScheme={'green'} variant={'solid'} 
+              onClick={() => handleLogin()}>
               Sign in
             </Button>
             <Link color={'green.500'} href="/register">Not registered? Sign up here!</Link>
