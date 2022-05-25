@@ -325,18 +325,11 @@ const NAV_ITEMS: Array<NavItem> = [
     href: '/',
   },
   {
-    label: 'Game reviews',
-    children: [
-      {
-        label: 'Critic reviews',
-        subLabel: 'Browse the latest reviews our official critics',
-        href: '/reviews/critics',
-      },
-      {
-        label: 'User reviews',
-        subLabel: 'Browse the latest reviews ordinary gamers',
-        href: '/reviews/users',
-      }
-    ],
+    label: 'Critic reviews',
+    href: '/reviews/critics',
+  },
+  {
+    label: 'About us',
+    href: '/about',
   }
 ];
