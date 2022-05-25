@@ -16,6 +16,8 @@ import {
   Stack,
   Badge,
   Input,
+  Button,
+  Flex,
 } from '@chakra-ui/react';
 import { Blog } from '../interface/post';
 import PostCard from '../components/postCard';
@@ -43,6 +45,7 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
 const CriticReviews = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(10)
+  const [createdAt, setCreatedAt] = useState(1)
   const [game, setGame] = useState<Games.GameData>()
   const [latestPost, setLatestPost] = useState<Blog.Post>({
       _id: '',
@@ -61,23 +64,31 @@ const CriticReviews = () => {
   })
 
   useEffect(() => {
-    getPosts(1, 5)
+    getPosts(1, 6, -1)
     .then((res: any)=> setPostResponse(res.data))
     getLatestReviewerPost()
     .then((res: any) => setLatestPost(res.data))
   }, [])
   
   useEffect(() => {
-    console.log(currentPage)
   }, [currentPage, totalPages])
 
+  useEffect(() => {
+    getPosts(1, 6, createdAt)
+    .then((res: any)=> setPostResponse(res.data))
+  }, [createdAt])
+
   const debouncedSearch = debounce(async (criteria: string) => {
-    if (criteria === "") { getPosts(1, 5).then((res: any)=> setPostResponse(res.data)) }
+    if (criteria === "") { getPosts(1, 5, createdAt).then((res: any)=> setPostResponse(res.data)) }
     else getPostsByGame(1, 5, criteria).then((response) => response.data).then((data: any) => setPostResponse(data))
   }, 500);
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.target.value);
+  }
+
+  const handleCreatedAtChange = async () => {
+    if (createdAt === -1) setCreatedAt(1); else setCreatedAt (-1)
   }
 
   return (
@@ -141,12 +152,17 @@ const CriticReviews = () => {
       <Heading as="h2" marginTop={5}>
         Other reviews
       </Heading>
-      <Text mb='8px'>Search for a game</Text>
-      <Input
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
-          placeholder='Search'
-          size='sm'
-      />
+      <Text mb='8px'>Search by game</Text>
+      <Flex alignContent='center' alignItems='center'>
+        <Input
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
+            placeholder='Game name'
+            size='sm'
+        />
+        <Button colorScheme='teal' size='sm' mx={5} px={50} onClick={() => handleCreatedAtChange()} >
+          {createdAt !== -1 ? <>Sort by new</> : <>Sort by old</>}
+          </Button>
+      </Flex>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacingX={6}>
         {postResponse.posts.length < 1 ? <Spinner size='xl' /> : (
           postResponse.posts?.map(data => {
@@ -158,7 +174,7 @@ const CriticReviews = () => {
 
       <Paginator currentPage={currentPage} totalPages={10} setCurrentPage={setCurrentPage} />
       
-      <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
+      <VStack paddingTop="40px" my={50} alignItems="flex-start">
         <Heading as="h2">What we write about</Heading>
         <Text as="p" fontSize="lg">
           Gaming and writing don’t have much in common, do they?
