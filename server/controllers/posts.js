@@ -94,13 +94,7 @@ export const createPost = async (req, res) => {
 export const getReviewerComments = async (req, res) => { 
     const { email } = req.query
     try {
-        const post = await Post
-        // .find({'reviewerComments':{"$elemMatch":{authorEmail: email}}})
-        // .populate({
-        //     "path": "reviewerComments.authorEmail",
-        //     "match": {"authorEmail": email}
-        // })
-        // returns wrong comments, fix this
+        const post = await getLatestPost
         .aggregate([
             { $match: { reviewerComments :{"$elemMatch":{authorEmail: email}} } },
             {
@@ -116,7 +110,6 @@ export const getReviewerComments = async (req, res) => {
                     },
                 }}
         ])
-        // .select('reviewerComments') // returns the first comment of a array, this could be the wrong author
         .exec()
         console.log(post)
         res.status(200).json(post);
