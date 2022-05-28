@@ -18,3 +18,5 @@ export const getLatestReviewerPost = async () => await AxiosClient.get<Blog.Post
 export const getCriticReviews = async (email: string) => await AxiosClient.get<any>(`${BASE_URL}/reviewers/comments?email=${email}`)
 
 export const getCriticAverageGrade = async (gameId: string) => await AxiosClient.get<Blog.AverageGrades>(`${BASE_URL}/posts/average/reviewers/grade?id=${gameId}`)
+
+export const getUserAverageGrade = async (gameId: string) => await AxiosClient.get<Blog.AverageGrades>(`${BASE_URL}/posts/average/users/grade?id=${gameId}`)

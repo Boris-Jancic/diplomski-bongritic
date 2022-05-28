@@ -31,13 +31,13 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
     <HStack marginTop="2" spacing="2" display="flex" alignItems="center">
       <Image
         borderRadius="full"
-        boxSize="40px"
+        boxSize="30px"
         src={props.avatar}
         alt={`Avatar of ${props.name}`}
       />
-      <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`} fontSize="md">{props.name}</Link>
-      <Text>—</Text>
-      <Text>{props.date?.toLocaleDateString()}</Text>
+      <Text fontSize="xs">
+        Last reviewed by <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`}>{props.name}</Link> {props.date?.toLocaleDateString()}
+      </Text>
     </HStack>
   );
 };
@@ -163,7 +163,7 @@ const CriticReviews = () => {
           {createdAt !== -1 ? <>Sort by new</> : <>Sort by old</>}
           </Button>
       </Flex>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacingX={6}>
+      <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacingX={6}>
         {postResponse.posts.length < 1 ? <Spinner size='xl' /> : (
           postResponse.posts?.map(data => {
             return ( <PostCard key={data._id} post={data} /> )

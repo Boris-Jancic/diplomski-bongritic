@@ -27,7 +27,7 @@ import {
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import React, { useEffect, useState } from 'react'
-import { getCriticAverageGrade, getReviewerPost } from '../api/blogs/blogService';
+import { getCriticAverageGrade, getReviewerPost, getUserAverageGrade } from '../api/blogs/blogService';
 import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
 import { BlogAuthor } from './criticReviews';
@@ -40,7 +40,8 @@ export default function PostView() {
   const id = queryParams.get('id');
   const [post, setPost] = useState<Blog.Post>()
   const [trailers, setTrailers] = useState<Array<Games.TrailerResult>>()
-  const [averageGrade, setAverageGrade] = useState<Blog.AverageGrades>()
+  const [avgCriticGrade, setAvgCriticGrade] = useState<number>(0)
+  const [avgUserGrade, setAvgUserGrade] = useState<number>(0)
 
   useEffect(() => { 
     getReviewerPost(String(id))
@@ -54,11 +55,13 @@ export default function PostView() {
       .then((data: Games.GameMovies) => setTrailers(data.results))
       getCriticAverageGrade(String(post._id))
       .then(response => response.data)
-      .then((data: Blog.AverageGrades) => setAverageGrade(data))
+      .then((data: any) => setAvgCriticGrade(data.criticGrade))
+      getUserAverageGrade(String(post._id))
+      .then(response => response.data)
+      .then((data: any) => setAvgUserGrade(data.userGrade))
     }
   }, [post])
   
-  console.log(averageGrade)
   return (
     <Container maxW={'7xl'}>
       <SimpleGrid
@@ -198,7 +201,7 @@ export default function PostView() {
                     fontWeight="700"
                     rounded="md"
                   >
-                    {!averageGrade?.critic ? <>No user grades</> : (averageGrade?.critic)}
+                    {avgCriticGrade === 0 ? <>No user grades</> : (avgCriticGrade)}
                   </Text>
               </Flex>
                 {!post?.reviewerComments ? <Spinner size='xl' /> : (
@@ -220,13 +223,13 @@ export default function PostView() {
                     py={2}
                     px={2}
                     mx={15}
-                    bg="green.600"
+                    bg="green.400"
                     color="white"
                     fontSize="xl"
                     fontWeight="700"
                     rounded="md"
                   >
-                    {!averageGrade?.user ? <>No user grades</> : (averageGrade?.user)}
+                    {avgCriticGrade === 0 ? <>No user grades</> : (avgUserGrade)}
                   </Text>
               </Flex>
 

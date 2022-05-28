@@ -117,7 +117,7 @@ export const getReviewerComments = async (req, res) => {
     }
 }
 
-export const getAverageGrades = async (req, res) => {
+export const getAverageGradesReviewer = async (req, res) => {
     const { id } = req.query
     try {
         const grades = await Post.aggregate([
@@ -130,13 +130,35 @@ export const getAverageGrades = async (req, res) => {
                 $unwind: "$reviewerComments"
             },
             {
+                $group:{
+                    _id: "$_id",
+                    criticGrade: { $avg: "$reviewerComments.grade"},
+                }
+            }
+        ])
+        res.status(200).json(grades[0]);
+    } catch (error) {
+        console.log(error.message)
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getAverageGradesUser = async (req, res) => {
+    const { id } = req.query
+    try {
+        const grades = await Post.aggregate([
+            {
+                $match:{
+                    _id: mongoose.Types.ObjectId(`${id}`)
+                }
+            },
+            {
                 $unwind: "$userComments"
             },
             {
                 $group:{
                     _id: "$_id",
-                    critic: { $avg: "$reviewerComments.grade"},
-                    user: { $avg: "$userComments.grade"}
+                    userGrade: { $avg: "$userComments.grade"},
                 }
             }
         ])

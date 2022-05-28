@@ -41,7 +41,7 @@ export default function PostCard(props: {post: Blog.Post}) {
                 <Stack direction='row' marginTop="2">
                     {props.post.game?.genres.map((item: Games.Genre) => <Badge key={item.slug} colorScheme='green'>{item.name}</Badge>)}
                 </Stack>
-                <Heading fontSize="x-large" marginTop="2">
+                <Heading fontSize="lg" marginTop="2">
                     <Text color='cadetblue'>
                         {props.post.game?.name}
                     </Text>

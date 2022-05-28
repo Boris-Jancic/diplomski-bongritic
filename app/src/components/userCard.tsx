@@ -28,7 +28,7 @@ export default function UserCard(props: {comment: Blog.UserComment}){
           <Text
             py={3}
             px={3}
-            bg="gray.600"
+            bg="green.600"
             color="gray.100"
             fontSize="xl"
             fontWeight="700"
