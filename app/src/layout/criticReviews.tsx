@@ -36,7 +36,7 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
         alt={`Avatar of ${props.name}`}
       />
       <Text fontSize="xs">
-        Last reviewed by <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`}>{props.name}</Link> {props.date?.toLocaleDateString()}
+        Last reviewed by <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`}><b>{props.name}</b></Link> {props.date?.toLocaleDateString()}
       </Text>
     </HStack>
   );
@@ -110,7 +110,7 @@ const CriticReviews = () => {
             zIndex="2"
             marginLeft={{ base: '0', sm: '5%' }}
             marginTop="5%">
-            <Link textDecoration="none" _hover={{ textDecoration: 'none' }}>
+            <Link textDecoration="none" _hover={{ textDecoration: 'none' }} href={`/post/view?id=${latestPost._id}`}>
               <Image
                 borderRadius="lg"
                 src={latestPost.game?.background_image}
