@@ -14,6 +14,7 @@ import {
   Link,
   useToast,
   Image,
+  Textarea,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -26,14 +27,15 @@ export default function RegisterClient() {
   const [ isLogged, setIsLogged ] = useRecoilState(authAtom);
   const [showPassword, setShowPassword] = useState(false);  
   const toast = useToast()
-  const [client, setClient] = useState({
+  const [reviewer, setReviewer] = useState({
     firstName: '',
     lastName: '',
     username: '',
     email: '',
     password: '',
     jmbg: '',
-    avatar: ''
+    biography: '',
+    avatar: '',
   })
   
   const validationSchema = Yup.object({
@@ -48,7 +50,8 @@ export default function RegisterClient() {
     firstName: false,
     lastName: false,
     jmbg: false,
-    avatar: false
+    biography: false,
+    avatar: false,
   })
   
   useEffect(() => {
@@ -57,10 +60,10 @@ export default function RegisterClient() {
 
   // Handles client state changing by input
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: String) => {
-    const clientChanged = {...client};
+    const clientChanged = {...reviewer};
     //@ts-ignore
     clientChanged[prop] = e.target.value;
-    setClient(clientChanged)
+    setReviewer(clientChanged)
     validateClientForm(clientChanged)
   }
   
@@ -72,6 +75,7 @@ export default function RegisterClient() {
     !client.firstName ? errors.firstName = true : errors.firstName = false 
     !client.lastName ? errors.lastName = true : errors.lastName = false 
     !client.jmbg ? errors.jmbg = true : errors.jmbg = false 
+    !client.biography ? errors.biography = true : errors.biography = false 
     !client.avatar ? errors.avatar = true : errors.avatar = false 
   }
 
@@ -87,9 +91,9 @@ export default function RegisterClient() {
 
   // Handles registration of clients
   const handleRegister = () => {
-    validationSchema.isValid(client)
+    validationSchema.isValid(reviewer)
       .then(function (valid) {
-        valid ? AuthenticationService.registerReviewer(client, responseToast) : responseToast('Please fill out remaning fields', 'warning')
+        valid ? AuthenticationService.registerReviewer(reviewer, responseToast) : responseToast('Please fill out remaning fields', 'warning')
       })
   }
   
@@ -99,7 +103,7 @@ export default function RegisterClient() {
     if (files) {
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        setClient({ ...client, avatar: reader.result?.toString() ?? "" });
+        setReviewer({ ...reviewer, avatar: reader.result?.toString() ?? "" });
       });
       reader.readAsDataURL(files[0]);
     }
@@ -141,7 +145,7 @@ export default function RegisterClient() {
             </FormControl>
             <FormControl id="jmbg" isInvalid={errors.username}>
               <FormLabel>JMBG</FormLabel>
-              <Input type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'jmbg')}/>
+              <Input maxLength={13} type="text" onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'jmbg')}/>
             </FormControl>
             <FormControl id="email" isInvalid={errors.email}>
               <FormLabel>Email address</FormLabel>
@@ -161,6 +165,13 @@ export default function RegisterClient() {
                   </Button>
                 </InputRightElement>
               </InputGroup>
+            </FormControl>
+            <FormControl id="biography" isInvalid={errors.biography}>
+              <FormLabel>Short biography</FormLabel>
+              <Textarea
+                  id='biography' 
+                  //@ts-ignore
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => inputHandler(event, 'biography')} />
             </FormControl>
             <FormControl id="avatar" isInvalid={errors.avatar}>
               <FormLabel>Avatar</FormLabel>

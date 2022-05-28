@@ -30,6 +30,10 @@ const reviewerSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    biography:{
+        type: String,
+        required: true
+    },
     activated:{
         type: Boolean,
     },
@@ -37,4 +41,6 @@ const reviewerSchema = mongoose.Schema({
     timestamps: true
 })
 
-export default mongoose.model('Reviewer', reviewerSchema)
+const Reviewer = mongoose.model('Reviewer', reviewerSchema)
+
+export default Reviewer

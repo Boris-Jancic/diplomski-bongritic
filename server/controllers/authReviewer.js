@@ -15,7 +15,6 @@ export const loginReviewer = async (req, res) => {
 
         const isPasswordCorrect = await bcrypt.compare(password, reviewer.password);
 
-        console.log(isPasswordCorrect)
         if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
         if (!reviewer.activated) return res.status(403).json({ message: "You are now allowed to use Bongritic" });

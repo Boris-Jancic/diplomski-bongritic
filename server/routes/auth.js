@@ -41,7 +41,10 @@ router.post('/reviewer/register',
     check("jmbg")
         .trim()
         .isLength(13)
-        .withMessage("The jmbg must have minimum length of 13")
+        .withMessage("The jmbg must have minimum length of 13"),
+
+    check("biography")
+        .trim()
   ],
   (req, res, next) => {
     const error = validationResult(req).formatWith(({ msg }) => msg);

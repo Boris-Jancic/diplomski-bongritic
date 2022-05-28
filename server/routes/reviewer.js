@@ -1,9 +1,16 @@
 import express from "express"
-import { getReviewers, getAvatar } from "../controllers/reviewer.js"
+import { getReviewer, getReviewers, getAvatar } from "../controllers/reviewer.js"
 import { check, validationResult } from "express-validator";
 import { getReviewerComments } from "../controllers/posts.js"
 
 const router = express.Router()
+
+router.get('/',
+    check('email')
+    .isEmpty()
+    .isString()
+    .trim()
+    , getReviewer)
 
 router.get('/', getReviewers)
 
