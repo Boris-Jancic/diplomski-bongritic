@@ -3,6 +3,8 @@ import AxiosClient from "../client/axiosClient";
 
 const BASE_URL = process.env.REACT_APP_API_KEY
 
+export const getReviewer = async(email: string) => await AxiosClient.get<Blog.Reviewer>(`${BASE_URL}/reviewers?email=${email}`)
+
 export const postReviewerPost = async (post: Blog.CreatePost) => await AxiosClient.post<Blog.CreatePost>(`${BASE_URL}/posts`, post)
 
 export const getPosts = async (page: number, limit: number, createdAt: number) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts?page=${page}&limit=${limit}&createdAt=${createdAt}`)

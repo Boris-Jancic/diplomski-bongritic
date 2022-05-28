@@ -94,8 +94,7 @@ export const createPost = async (req, res) => {
 export const getReviewerComments = async (req, res) => { 
     const { email } = req.query
     try {
-        const post = await getLatestPost
-        .aggregate([
+        const post = await Post.aggregate([
             { $match: { reviewerComments :{"$elemMatch":{authorEmail: email}} } },
             {
                 $project : {
@@ -111,7 +110,6 @@ export const getReviewerComments = async (req, res) => {
                 }}
         ])
         .exec()
-        console.log(post)
         res.status(200).json(post);
     } catch (error) {
         console.log(error.message)
@@ -130,6 +128,9 @@ export const getAverageGrades = async (req, res) => {
             },
             {
                 $unwind: "$reviewerComments"
+            },
+            {
+                $unwind: "$userComments"
             },
             {
                 $group:{

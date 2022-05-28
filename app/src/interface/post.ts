@@ -69,7 +69,13 @@ export module Blog {
     }
 
     export interface Reviewer {
-        
+        firstName: string;
+        lastName: string;
+        username: string;
+        email: string;
+        avatar: string;
+        biography: string;
+        createdAt: string;
     }
 
     export interface Client {
