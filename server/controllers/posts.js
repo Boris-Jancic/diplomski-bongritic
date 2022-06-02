@@ -2,7 +2,8 @@ import Post from '../models/post.js'
 import mongoose from 'mongoose'
 
 export const getPosts = async (req, res) => { 
-    const { page = 1, limit = 10, createdAt = -1 } = req.query
+    const { page = 1, limit = 1, createdAt = -1 } = req.query
+    console.log(page, limit)
     try {
         const count = await Post.countDocuments()
         const posts = await Post.find()
@@ -11,7 +12,7 @@ export const getPosts = async (req, res) => {
             .sort({"createdAt": createdAt})
 
         res.status(200).json({
-            currentPage: page,
+            currentPage: Math.ceil(page),
             totalPages: Math.ceil(count / limit),
             posts: posts
         });

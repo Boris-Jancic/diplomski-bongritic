@@ -24,6 +24,7 @@ export default function Paginator (props: {
         cursor={props.disabled && "not-allowed"}
         {...(props.active && activeStyle)}
         display={props.p && !props.active && { base: "none", sm: "block" }}
+        onClick={props.onClick}
       >
         {props.children}
       </chakra.button>
@@ -36,7 +37,7 @@ export default function Paginator (props: {
   }
   
   const onClickNext = () => {
-    if (props.currentPage <= props.totalPages) props.setCurrentPage(props.currentPage + 1)
+    if (props.currentPage !== props.totalPages) props.setCurrentPage(props.currentPage + 1)
   }
 
   return (
@@ -55,11 +56,14 @@ export default function Paginator (props: {
             boxSize={4}
           />
         </PagButton>
-        <PagButton p>1</PagButton>
-        <PagButton p active> 2</PagButton>
-        <PagButton p>3</PagButton>
-        <PagButton p>4</PagButton>
-        <PagButton p>5</PagButton>
+        {props.currentPage - 1 === 0 ? <></> : <PagButton onClick={onClickPrevious}>{props.currentPage - 1}</PagButton>} 
+        <PagButton active> {props.currentPage}</PagButton>
+        {props.currentPage === props.totalPages ? <></> : 
+          <>
+            <PagButton onClick={onClickNext}>{props.currentPage + 1}</PagButton>
+            <PagButton>... {props.totalPages}</PagButton>
+          </>
+        } 
         <PagButton onClick={() => onClickNext}>
           <Icon
             onClick={onClickNext}

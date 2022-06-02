@@ -64,22 +64,26 @@ const CriticReviews = () => {
   })
 
   useEffect(() => {
-    getPosts(1, 6, -1)
+    getPosts(1, 8, -1)
     .then((res: any)=> setPostResponse(res.data))
     getLatestReviewerPost()
     .then((res: any) => setLatestPost(res.data))
   }, [])
   
   useEffect(() => {
-  }, [currentPage, totalPages])
+    getPosts(currentPage, 8, -1)
+    .then((res: any)=> setPostResponse(res.data))
+  }, [currentPage])
 
   useEffect(() => {
-    getPosts(1, 6, createdAt)
+    getPosts(currentPage, 8, createdAt)
     .then((res: any)=> setPostResponse(res.data))
   }, [createdAt])
 
+  console.log(postResponse)
+
   const debouncedSearch = debounce(async (criteria: string) => {
-    if (criteria === "") { getPosts(1, 5, createdAt).then((res: any)=> setPostResponse(res.data)) }
+    if (criteria === "") { getPosts(1, 8, createdAt).then((res: any)=> setPostResponse(res.data)) }
     else getPostsByGame(1, 5, criteria).then((response) => response.data).then((data: any) => setPostResponse(data))
   }, 500);
 
@@ -172,7 +176,7 @@ const CriticReviews = () => {
         }
       </SimpleGrid>
 
-      <Paginator currentPage={currentPage} totalPages={10} setCurrentPage={setCurrentPage} />
+      <Paginator currentPage={currentPage} totalPages={postResponse.totalPages} setCurrentPage={setCurrentPage} />
       
       <VStack paddingTop="40px" my={50} alignItems="flex-start">
         <Heading as="h2">What we write about</Heading>
