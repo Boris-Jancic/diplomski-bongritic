@@ -1,16 +1,14 @@
 import { Flex, useColorModeValue, Box, chakra, Link, Image, Text } from "@chakra-ui/react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { getRecoil, setRecoil } from "recoil-nexus";
+import { useSetRecoilState } from "recoil";
 import { Blog } from "../interface/post";
 import { criticCommentAtom } from "../state/criticComment";
 
 export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
-  const [ay, setCriticComment] = useRecoilState(criticCommentAtom);
+  const setCriticComment = useSetRecoilState(criticCommentAtom);
 
   const handleReadMore = () => {
     setCriticComment(props.comment.author)
     localStorage.setItem('criticComment', JSON.stringify(props.comment))
-    // window.location.assign(`review/critic?=${props.comment.author}&game=${props.comment}`)
   }
 
   return (

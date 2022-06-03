@@ -1,12 +1,11 @@
 import { Box, GridItem, Heading, Spinner, Text, Image, Flex, Divider } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import { getCriticReviews, getReviewer } from '../api/blogs/blogService'
-import ReviewCard from '../components/reviewCard';
+import ReviewCard from '../components/criticReviewCard';
 import { Blog } from '../interface/post';
 
 export default function ReviewerComments() {
   const queryParams = new URLSearchParams(window.location.search);
-  const name = queryParams.get('name');
   const email = queryParams.get('email');
   const [responseData, setResponseData] = useState<any>([])
   const [reviewer, setReviewer] = useState<Blog.Reviewer>()
@@ -45,7 +44,7 @@ export default function ReviewerComments() {
       <Heading as='h4' size='lg'>{reviewer?.username}'s comments</Heading>
       
       {!responseData ? <Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text> : (
-        responseData.length == 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
+        responseData.length === 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
         responseData.map((post: any) => {
           console.log(post)
             return ( <ReviewCard key={post.reviewerComments[0]._id} comment={post.reviewerComments[0]} /> )

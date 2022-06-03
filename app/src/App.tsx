@@ -8,9 +8,9 @@ import {
 import { ChakraProvider } from "@chakra-ui/provider"
 import Navbar from "./components/navbar"
 import Footer from "./components/footer"
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./layout/login"
-import RegisterClient from "./layout/registerReviewer"
+import RegisterClient from "./layout/registerCritic"
 import CriticReviews from "./layout/criticReviews"
 import UserReviews from "./layout/userReviews"
 import Home from "./layout/home"
@@ -21,7 +21,7 @@ import GameReview from "./layout/gameReview"
 import SuccessfullPost from "./layout/succesFullBlogPost"
 import PostView from "./layout/postView"
 import CriticCommentView from "./layout/criticCommentView"
-import ReviewerComments from "./layout/reviewerComments"
+import ReviewerComments from "./layout/criticComments"
 
 export const App = () => (
   <ChakraProvider theme={theme}>

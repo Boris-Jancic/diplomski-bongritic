@@ -1,21 +1,15 @@
 import {
   Box,
-  chakra,
   Container,
   Stack,
   Text,
   Image,
   Flex,
-  VStack,
-  Button,
   Heading,
   SimpleGrid,
-  StackDivider,
   useColorModeValue,
-  VisuallyHidden,
   List,
   ListItem,
-  Avatar,
   Badge,
   Divider,
   Link,
@@ -24,16 +18,13 @@ import {
   Spinner,
   AspectRatio,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { MdLocalShipping } from 'react-icons/md';
 import React, { useEffect, useState } from 'react'
 import { getCriticAverageGrade, getReviewerPost, getUserAverageGrade } from '../api/blogs/blogService';
 import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
-import { BlogAuthor } from './criticReviews';
-import ReviewCard from '../components/reviewCard';
+import ReviewCard from '../components/criticReviewCard';
 import { getGameTrailers } from '../api/games/gameService';
-import UserCard from '../components/userCard';
+import UserCard from '../components/userReviewCard';
 
 export default function PostView() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -46,7 +37,7 @@ export default function PostView() {
   useEffect(() => { 
     getReviewerPost(String(id))
     .then(response => setPost(response.data))
-  }, [])
+  }, [id])
 
   useEffect(() => {
     if(post?.game) {
@@ -161,7 +152,7 @@ export default function PostView() {
             <Heading>Trailers</Heading>
             <Grid templateColumns='repeat(4, 1fr)' gap={6}>
                 {!trailers ? <Text>Can't load trailers</Text> : (
-                  trailers.length == 0 ?  <GridItem rowSpan={4}><Text>This game doesen't have any trailers that we could fetch</Text></GridItem> : 
+                  trailers.length === 0 ?  <GridItem rowSpan={4}><Text>This game doesen't have any trailers that we could fetch</Text></GridItem> : 
                   trailers.map(trailer => {
                     return (
                       <GridItem>
@@ -205,7 +196,7 @@ export default function PostView() {
                   </Text>
               </Flex>
                 {!post?.reviewerComments ? <Spinner size='xl' /> : (
-                  post.reviewerComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text></GridItem> : 
+                  post.reviewerComments.length === 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text></GridItem> : 
                   post.reviewerComments.map(comment => {
                     return ( <ReviewCard key={comment._id} comment={comment} /> )
                     })
@@ -234,7 +225,7 @@ export default function PostView() {
               </Flex>
 
                 {!post?.userComments ? <Spinner size='xl' /> : (
-                  post.userComments.length == 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any user reviews yet</Text></GridItem> : 
+                  post.userComments.length === 0 ?  <GridItem rowSpan={4}><Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any user reviews yet</Text></GridItem> : 
                   post.userComments.map(comment => {
                     return ( <UserCard key={comment._id} comment={comment} /> )
                     })

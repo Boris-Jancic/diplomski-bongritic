@@ -13,18 +13,17 @@ import {
   useColorModeValue,
   Link,
   useToast,
-  Image,
   Textarea,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { AuthenticationService } from '../api/auth/authService';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { authAtom } from '../state/auth';
 import * as Yup from "yup";
 
 export default function RegisterClient() {
-  const [ isLogged, setIsLogged ] = useRecoilState(authAtom);
+  const isLogged = useRecoilValue(authAtom);
   const [showPassword, setShowPassword] = useState(false);  
   const toast = useToast()
   const [reviewer, setReviewer] = useState({
@@ -56,7 +55,7 @@ export default function RegisterClient() {
   
   useEffect(() => {
     if (isLogged) window.location.assign("/") 
-  }, [])
+  }, [isLogged])
 
   // Handles client state changing by input
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>, prop: String) => {
