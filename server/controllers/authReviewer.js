@@ -8,8 +8,6 @@ export const loginReviewer = async (req, res) => {
     const { email, password } = req.body;
     try {
         const reviewer = await Reviewer.findOne({ email });
-        console.log(email)
-        console.log(password)
 
         if (!reviewer) return res.status(404).json({ message: "Reviewer doesn't exist" });
 
