@@ -1,16 +1,21 @@
 import mongoose from 'mongoose'
 
-const adminSchema = mongoose.Schema({
-    firstName: {
+const reviewerSchema = mongoose.Schema({
+    firstName:{
         type: String,
+        required: true
     },
-    secondName:{
+    lastName:{
         type: String,
+        required: true
     },
-    jmbg: {
+    jmbg:{
         type: String,
-        required: true,
-        unique:true
+        required: true
+    },
+    username:{
+        type: String,
+        required: true
     },
     email: {
         type: String,
@@ -21,17 +26,21 @@ const adminSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    picture: {
+    avatar:{
         type: String,
         required: true
     },
-    grade: {
-        type: Number,
-    }
+    biography:{
+        type: String,
+        required: true
+    },
+    activated:{
+        type: Boolean,
+    },
 }, {
     timestamps: true
 })
 
-const client = mongoose.model('admin', adminSchema)
+const Reviewer = mongoose.model('Reviewer', reviewerSchema)
 
-export default client
+export default Reviewer

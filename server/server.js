@@ -4,8 +4,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
-import clientRoutes from './routes/clients.js';
-import reviewerRoutes from './routes/reviewers.js';
+import reviewerRoutes from './routes/reviewer.js';
 import postRoutes from './routes/posts.js';
 import authRoutes from './routes/auth.js';
 
@@ -17,7 +16,6 @@ app.use(bodyParser.json({limit: "30mb", extended: "true"}))
 app.use(bodyParser.urlencoded({limit: "30mb", extended: "true"}))
 app.use(cors())
 
-app.use('/clients', clientRoutes);
 app.use('/reviewers', reviewerRoutes);
 app.use('/posts', postRoutes);
 app.use('/auth', authRoutes);

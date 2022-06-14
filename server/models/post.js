@@ -1,27 +1,26 @@
 import mongoose from 'mongoose'
 
 const postSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
+    game: {
     },
-    creator: {
-        type: String,
-        required: true,
-    },
-    message: {
-        type: String,
-        required: true,
-    },
-    selectedFile: {
-        type: String,
-        required: true,
-    },
-    comments: [
+    reviewerComments: [
         {
             author: String,
+            authorEmail: String,
+            avatar: String,
+            title: String,
             text: String,
-            grade: Number
+            grade: Number,
+            date: String
+        }
+    ],
+    userComments: [
+        {
+            author: String,
+            authorEmail: String,
+            text: String,
+            grade: Number,
+            date: String
         }
     ]
 }, {
