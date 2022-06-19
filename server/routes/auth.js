@@ -1,6 +1,7 @@
 import express from "express"
 import { check, validationResult } from "express-validator";
 import { loginReviewer, registerReviewer } from "../controllers/authReviewer.js"
+import { loginClient, registerClient } from "../controllers/authClient.js"
 
 const router = express.Router()
 
@@ -57,5 +58,8 @@ router.post('/reviewer/register',
       next();
     }
   }, registerReviewer)
+
+router.post('/client/login', loginClient)
+router.post('/client/register', registerClient)
 
 export default router
