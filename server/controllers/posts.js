@@ -91,6 +91,29 @@ export const createPost = async (req, res) => {
     }
 }
 
+export const createUserComment = async (req, res) => {
+    const comment = {
+        author: req.body.author,
+        text: req.body.text,
+        grade: req.body.grade,
+        date: new Date().toLocaleDateString(),
+    }
+    const { gameId } = req.body 
+    try {
+        const existingPost = await Post.findOne({'game.id': gameId}).exec()
+
+        if (existingPost.userComments.filter(com => com.author === comment.author).length > 0)
+            return res.status(409).json({messages:['You have already submited a review for this game']})
+
+        existingPost.userComments.push(comment)
+        existingPost.save()
+        
+        return res.status(201).send(comment)
+    } catch (error) {
+        return res.status(409).json({message: error.message})
+    }
+}
+
 export const getReviewerComments = async (req, res) => { 
     const { email } = req.query
     try {

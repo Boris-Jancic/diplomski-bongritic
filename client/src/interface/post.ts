@@ -40,6 +40,15 @@ export module Blog {
         _id: string;
     }
 
+    export interface CreateUserComment {
+        gameId: number;
+        author: string;
+        text: string;
+        grade: number;
+        date: string;
+        _id: string;
+    }
+
     export interface UserComment {
         author: string;
         text: string;

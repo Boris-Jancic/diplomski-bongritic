@@ -1,9 +1,11 @@
 import { Flex, useColorModeValue, Box, chakra, Link, Image, Text } from "@chakra-ui/react";
 import { Blog } from "../interface/post";
 
-export default function UserCard(props: {comment: Blog.UserComment}){
+export default function UserCard(props: {key: string, comment: Blog.UserComment}){
+  console.log(props.comment)
   return (
     <Flex
+      key={props.key}
       p={25}
       w="full"
       alignItems="flex-start"
@@ -26,8 +28,9 @@ export default function UserCard(props: {comment: Blog.UserComment}){
             {props.comment.date}
           </chakra.span>
           <Text
-            py={3}
+            py={1}
             px={3}
+            marginLeft={5}
             bg="green.600"
             color="gray.100"
             fontSize="xl"
