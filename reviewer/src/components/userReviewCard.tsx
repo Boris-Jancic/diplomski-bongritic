@@ -1,9 +1,11 @@
-import { Flex, useColorModeValue, Box, chakra, Link, Image, Text } from "@chakra-ui/react";
+import { Flex, useColorModeValue, Box, chakra, Link, Text, Divider } from "@chakra-ui/react";
 import { Blog } from "../interface/post";
 
-export default function UserCard(props: {comment: Blog.UserComment}){
+export default function UserCard(props: {key: string, comment: Blog.UserComment}){
+
   return (
     <Flex
+      key={props.key}
       p={25}
       w="full"
       alignItems="flex-start"
@@ -26,7 +28,13 @@ export default function UserCard(props: {comment: Blog.UserComment}){
             {props.comment.date}
           </chakra.span>
           <Text
-            py={3}
+            mx={10}
+            color="whatsapp.600"
+            decoration="CaptionText" >
+            {props.comment.game}
+          </Text>
+          <Text
+            py={1}
             px={3}
             bg="green.600"
             color="gray.100"
@@ -47,7 +55,9 @@ export default function UserCard(props: {comment: Blog.UserComment}){
           </Text>
         </Box>
 
-        <Flex justifyContent="space-between" alignItems="center" mt={4} 
+        <Divider m={2} />
+
+        <Flex justifyContent="space-between" alignItems="center"
             fontSize="md">
 
           <Flex alignItems="center">
@@ -55,11 +65,13 @@ export default function UserCard(props: {comment: Blog.UserComment}){
               color={useColorModeValue("gray.700", "gray.200")}
               fontWeight="700"
               cursor="pointer"
+              href={`/user/reviews?name=${props.comment.author}`}
             >
               {props.comment.author}
             </Link>
           </Flex>
         </Flex>
+
       </Box>
     </Flex>
   );

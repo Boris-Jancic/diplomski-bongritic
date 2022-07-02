@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Reviewer from "../models/reviewer.js";
-
-const secret = 'test'
+import mailToClient from '../service/mailer.js'
+import { TOKEN_SECRET } from '../server.js';
 
 export const loginReviewer = async (req, res) => { 
     const { email, password } = req.body;
@@ -13,15 +13,15 @@ export const loginReviewer = async (req, res) => {
 
         const isPasswordCorrect = await bcrypt.compare(password, reviewer.password);
 
-        if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
+        if (!isPasswordCorrect) { mailToClient(email, 'Warning', 'Bad login, was this you?' ) ;return res.status(400).json({ message: "Invalid credentials" });}
 
         if (!reviewer.activated) return res.status(403).json({ message: "You are now allowed to use Bongritic" });
 
         const token = jwt.sign({ 
             email: email,
-            name:reviewer.firstName + ' ' + reviewer.lastName,
-            avatar:reviewer.avatar,
-            role: 'REVIEWER' }, secret, { expiresIn: "120s" });
+            name: reviewer.username,
+            avatar: reviewer.avatar,
+            role: 'REVIEWER' }, TOKEN_SECRET, { expiresIn: "120s" });
 
         res.status(200).json(token);
     } catch (error) {
@@ -43,6 +43,7 @@ export const registerReviewer = async (req, res) => {
         return res.status(409).json({message: 'A reviewer with that email is already registered'})
 
     try {
+        mailToClient(newClient.email, 'Regarding your registration', 'Thank you for wanting to register as a critic to Bongritic! Our admins will see your request shortly, please be patient.' )
         newReviewer.password = await bcrypt.hash(newReviewer.password, await bcrypt.genSalt(10));
         newReviewer.activated = false
         newReviewer.save()

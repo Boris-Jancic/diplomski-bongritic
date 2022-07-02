@@ -1,0 +1,66 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@chakra-ui/icons": "^1.1.7",
+    "@chakra-ui/provider": "^1.7.13",
+    "@chakra-ui/react": "^1.8.7",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^10.4.9",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^25.2.3",
+    "@types/lodash": "^4.14.181",
+    "@types/node": "^12.20.47",
+    "axios": "^0.26.1",
+    "dotenv": "^16.0.0",
+    "formik": "^2.2.9",
+    "formik-chakra-ui": "^1.6.0",
+    "framer-motion": "^3.10.6",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-file-base64": "^1.0.3",
+    "react-icons": "^3.11.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.0",
+    "react-slick": "^0.29.0",
+    "recoil": "^0.7.0",
+    "recoil-nexus": "^0.3.15",
+    "typescript": "^4.6.3",
+    "web-vitals": "^0.2.4",
+    "yup": "^0.32.11"
+  },
+  "scripts": {
+    "start": "set PORT=3001 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
+    "@types/react-router": "^5.1.18",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-slick": "^0.23.8"
+  }
+}

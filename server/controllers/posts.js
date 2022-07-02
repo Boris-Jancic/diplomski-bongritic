@@ -53,6 +53,9 @@ export const getPost = async (req, res) => {
     const { id } = req.query
     try {
         const post = await Post.findById(id) 
+
+        post.reviewerComments = post.reviewerComments.filter(comment => comment.approved)
+
         res.status(200).json(post);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -63,6 +66,7 @@ export const createPost = async (req, res) => {
     const { authorization } = req.headers 
     if (authorization !== "REVIEWER") res.status(403).json({ message: error.message });
     const comment = {
+        game: req.body.comment.game,
         author: req.body.comment.author,
         authorEmail: req.body.comment.authorEmail,
         title: req.body.comment.title,
@@ -91,6 +95,48 @@ export const createPost = async (req, res) => {
     }
 }
 
+export const createUserComment = async (req, res) => {
+    const comment = {
+        author: req.body.author,
+        text: req.body.text,
+        grade: req.body.grade,
+        date: new Date().toLocaleDateString(), 
+        reported: false
+    }
+    const { gameId } = req.body 
+    try {
+        const existingPost = await Post.findOne({'game.id': gameId}).exec()
+
+        if (existingPost.userComments.filter(com => com.author === comment.author).length > 0)
+            return res.status(409).json({messages:['You have already submited a review for this game']})
+
+        comment.game = existingPost.game.name
+        existingPost.userComments.push(comment)
+        existingPost.save()
+        
+        return res.status(201).send(comment)
+    } catch (error) {
+        return res.status(409).json({message: error.message})
+    }
+}
+
+export const reportUserComment = async (req, res) => {
+    try {
+        const comment  = req.body
+        const existingPost = await Post.findOne({'game.name': comment.game}).exec()
+        const existingComment = existingPost.userComments.filter(item => String(item._id) === comment._id) 
+        
+        if (existingComment[0].reported === true)
+            return res.status(409).json({messages:['This comment has already been reported, the admin will see to it quickly.']})
+    
+        existingPost.userComments.filter(item => item.reported = true) 
+        existingPost.save()
+        return res.status(201).send("You have successfully reported this comment, the admin will see to it quickly")
+    } catch (error) {
+        return res.status(409).json({message: error.message})
+    }
+}
+
 export const getReviewerComments = async (req, res) => { 
     const { email } = req.query
     try {
@@ -103,7 +149,34 @@ export const getReviewerComments = async (req, res) => {
                             input: "$reviewerComments",
                             as: "comment",
                             cond: {
-                                $eq: [ "$$comment.authorEmail", email ]
+                                $eq: [ "$$comment.authorEmail", email ],
+                                $eq: [ "$$comment.approved", true ]
+                            }
+                        }
+                    },
+                }}
+        ])
+        .exec()
+        res.status(200).json(post);
+    } catch (error) {
+        console.log(error.message)
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const getUserComments = async (req, res) => { 
+    const { username } = req.query
+    try {
+        const post = await Post.aggregate([
+            { $match: { userComments :{"$elemMatch":{author: username}} } },
+            {
+                $project : {
+                    userComments: {
+                        $filter: {
+                            input: "$userComments",
+                            as: "comment",
+                            cond: {
+                                $eq: [ "$$comment.author", username ]
                             }
                         }
                     },

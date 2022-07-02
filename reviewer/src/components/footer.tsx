@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaInstagram, FaTwitter, FaYoutube, FaGithub } from 'react-icons/fa';
 import { BiMailSend } from 'react-icons/bi';
 import Logo from '../images/flower.svg'
 
@@ -66,12 +66,15 @@ export default function Footer() {
           spacing={8}>
           <Stack spacing={6}>
             <Box>
-              <span><img src={Logo} /> Bongritic</span>
+              <span><img alt="Bongritic" src={Logo} /> Bongritic</span>
             </Box>
             <Text fontSize={'sm'}>
-              © 2022 Chakra Templates. All rights reserved
+              © 2022 Bongritic services. All rights reserved
             </Text>
             <Stack direction={'row'} spacing={6}>
+              <SocialButton label={'Github'} href={'https://github.com/Boris-Jancic/diplomski-bongritic'}>
+                <FaGithub />
+              </SocialButton>
               <SocialButton label={'Twitter'} href={'#'}>
                 <FaTwitter />
               </SocialButton>
@@ -85,7 +88,7 @@ export default function Footer() {
           </Stack>
           <Stack align={'flex-start'}>
             <ListHeader>Company</ListHeader>
-            <Link href={'#'}>About us</Link>
+            <Link href={'/about'}>About us</Link>
             <Link href={'#'}>Blog</Link>
             <Link href={'#'}>Contact us</Link>
             <Link href={'#'}>Testimonials</Link>

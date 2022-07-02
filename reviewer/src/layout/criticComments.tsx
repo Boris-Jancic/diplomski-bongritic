@@ -12,13 +12,10 @@ export default function ReviewerComments() {
 
   useEffect(() => {
     if(email) {
-      getCriticReviews(String(email)).then(response => setResponseData(response.data))
       getReviewer(String(email)).then(res => res.data).then(data => setReviewer(data))
+      getCriticReviews(String(email)).then(response => setResponseData(response.data))
     }
   }, [email])
-
-  console.log(reviewer)
-
   return (
     <Box>
       <Flex alignItems="center"  my={30} w={500}>
@@ -34,7 +31,6 @@ export default function ReviewerComments() {
 
 
       <Flex w={{sm:'95%', md:'80', lg:750}} p={25} alignItems="center">
-        {/* Add reviewer biography here */}
         <Text fontSize="sm"  textAlign={'left'}> {reviewer?.biography} </Text> 
       </Flex>
 
@@ -46,7 +42,7 @@ export default function ReviewerComments() {
       {!responseData ? <Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text> : (
         responseData.length === 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
         responseData.map((post: any) => {
-          console.log(post)
+            if (post.reviewerComments.length === 0) return (<> </>)
             return ( <ReviewCard key={post.reviewerComments[0]._id} comment={post.reviewerComments[0]} /> )
           })
         )

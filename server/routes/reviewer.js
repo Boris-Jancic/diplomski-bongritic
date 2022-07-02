@@ -14,11 +14,7 @@ router.get('/',
 
 router.get('/', getReviewers)
 
-router.get('/comments'
-    // check('name')
-    // .isEmpty()
-    // .isString()
-, getReviewerComments)
+router.get('/comments', getReviewerComments)
 
 router.get('/avatar', check('name').isString().isEmpty(), getAvatar)
 

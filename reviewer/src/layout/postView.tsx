@@ -184,7 +184,7 @@ export default function PostView() {
 
                   <Text
                     py={2}
-                    px={2}
+                    px={3}
                     mx={15}
                     bg={"green.400"}
                     color="white"
@@ -212,7 +212,7 @@ export default function PostView() {
 
                   <Text
                     py={2}
-                    px={2}
+                    px={3}
                     mx={15}
                     bg="green.400"
                     color="white"

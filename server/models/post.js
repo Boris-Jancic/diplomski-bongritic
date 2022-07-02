@@ -8,19 +8,23 @@ const postSchema = mongoose.Schema({
             author: String,
             authorEmail: String,
             avatar: String,
+            game: String,
             title: String,
             text: String,
             grade: Number,
-            date: String
+            date: String,
+            approved: Boolean,
         }
     ],
     userComments: [
         {
+            game: String,
             author: String,
             authorEmail: String,
             text: String,
             grade: Number,
-            date: String
+            date: String,
+            reported: Boolean
         }
     ]
 }, {

@@ -30,6 +30,7 @@ export module Blog {
     }
 
     export interface ReviewerComment {
+        game?: string;
         author: string;
         authorEmail: string;
         avatar: string;
@@ -37,10 +38,12 @@ export module Blog {
         text: string;
         grade: number;
         date: string;
+        approved: boolean;
         _id: string;
     }
 
     export interface UserComment {
+        game: string;
         author: string;
         text: string;
         grade: number;
