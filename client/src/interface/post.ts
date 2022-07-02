@@ -33,10 +33,12 @@ export module Blog {
         author: string;
         authorEmail: string;
         avatar: string;
+        game: string;
         title: string;
         text: string;
         grade: number;
         date: string;
+        approved: boolean;
         _id: string;
     }
 
@@ -49,7 +51,13 @@ export module Blog {
         _id: string;
     }
 
+    export interface CreateReport {
+        reportingUser: string;
+        comment: UserComment;
+    }
+
     export interface UserComment {
+        game: string;
         author: string;
         text: string;
         grade: number;

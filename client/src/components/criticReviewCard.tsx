@@ -3,7 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { Blog } from "../interface/post";
 import { criticCommentAtom } from "../state/criticComment";
 
-export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
+export default function ReviewCard(props: {key: string, comment: Blog.ReviewerComment}){
   const setCriticComment = useSetRecoilState(criticCommentAtom);
 
   const handleReadMore = () => {
@@ -14,18 +14,17 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
   return (
     <Flex
       p={25}
-      w="full"
       alignItems="flex-start"
       justifyContent="center"
     >
       <Box
-        mx="auto"
+        key={props.key}
         px={8}
         py={4}
         rounded="lg"
         shadow="lg"
         bg={useColorModeValue("white", "gray.800")}
-        maxW="2xl"
+        maxW="3xl"
       >
         <Flex justifyContent="space-between" alignItems="center">
           <chakra.span
@@ -35,7 +34,13 @@ export default function ReviewCard(props: {comment: Blog.ReviewerComment}){
             {props.comment.date}
           </chakra.span>
           <Text
-            py={3}
+            mx={10}
+            color="whatsapp.600"
+            decoration="CaptionText" >
+            {props.comment.game}
+          </Text>
+          <Text
+            py={1}
             px={3}
             bg="green.600"
             color="gray.100"

@@ -8,7 +8,8 @@ import {
     createUserComment,
     getAverageGradesReviewer,
     getAverageGradesUser,
-    getPostByGameName
+    getPostByGameName,
+    reportUserComment
 } from "../controllers/posts.js"
 import { checkClient, checkReviewer, badRequestHandler } from "./security.js"
 
@@ -32,7 +33,11 @@ router.post('/user/comment',
     checkClient,
     createUserComment)
 
-router.get('/', getPosts)
+router.post('/user/comment/report', 
+    checkClient,
+    reportUserComment)
+
+router.get('/', getPosts) 
 
 router.get('/one', getPost)
 

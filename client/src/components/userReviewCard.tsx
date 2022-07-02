@@ -1,8 +1,37 @@
-import { Flex, useColorModeValue, Box, chakra, Link, Image, Text } from "@chakra-ui/react";
+import { Flex, useColorModeValue, Box, chakra, Link, Text, Button, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Modal, ModalFooter, useToast, Divider, useDisclosure } from "@chakra-ui/react";
 import { Blog } from "../interface/post";
+import { BsFlag } from 'react-icons/bs';
+import { postUserReport } from "../api/blogs/blogService";
 
 export default function UserCard(props: {key: string, comment: Blog.UserComment}){
-  console.log(props.comment)
+  const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const handleCommentReportSubmit = async () => {
+    postUserReport(props.comment)
+    .then(response => response.data)
+    .then(data =>
+      toast({
+        title: data,
+        status: 'success',
+        position: 'bottom',
+        isClosable: true,
+      }))
+    .catch(error => error.response)
+    .then(response => response.data)
+    .then(data => {
+      data.messages.map((msg: string)=> {
+        return toast({
+          title: msg,
+          status: 'warning',
+          position: 'bottom',
+          isClosable: true,
+        })
+      })
+    })
+    onClose()
+  }
+
   return (
     <Flex
       key={props.key}
@@ -28,9 +57,14 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
             {props.comment.date}
           </chakra.span>
           <Text
+            mx={10}
+            color="whatsapp.600"
+            decoration="CaptionText" >
+            {props.comment.game}
+          </Text>
+          <Text
             py={1}
             px={3}
-            marginLeft={5}
             bg="green.600"
             color="gray.100"
             fontSize="xl"
@@ -50,7 +84,9 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
           </Text>
         </Box>
 
-        <Flex justifyContent="space-between" alignItems="center" mt={4} 
+        <Divider m={2} />
+
+        <Flex justifyContent="space-between" alignItems="center"
             fontSize="md">
 
           <Flex alignItems="center">
@@ -58,11 +94,35 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
               color={useColorModeValue("gray.700", "gray.200")}
               fontWeight="700"
               cursor="pointer"
+              href={`/user/reviews?name=${props.comment.author}`}
             >
               {props.comment.author}
             </Link>
           </Flex>
+          <Button variant='ghost' rightIcon={<BsFlag color="red" />} onClick={onOpen}>
+            Flag
+          </Button>
         </Flex>
+
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size='md'
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Report this comment?</ModalHeader>
+            <ModalCloseButton />
+            <ModalFooter>
+              <Button colorScheme='green' mr={3} onClick={() => handleCommentReportSubmit()}>
+                Yes
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
       </Box>
     </Flex>
   );
