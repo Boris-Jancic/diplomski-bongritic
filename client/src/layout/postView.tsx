@@ -99,7 +99,7 @@ export default function PostView() {
     console.log(newComment)
     postUserComment(newComment)
     .then(response => response.data)
-    .then((data: Blog.UserComment) => { 
+    .then((data: any) => { 
       toast({
         title: 'Successfully posted a review',
         status: 'success',
@@ -113,7 +113,7 @@ export default function PostView() {
     .then(payload => payload.data)
     .then(data => {
       data.messages.map((msg: string)=> {
-        toast({
+        return toast({
           title: msg,
           status: 'warning',
           position: 'bottom',
@@ -255,8 +255,8 @@ export default function PostView() {
                 </Heading>
 
                   <Text
-                    py={2}
-                    px={2}
+                    py={1}
+                    px={3}
                     mx={15}
                     bg={"green.400"}
                     color="white"
