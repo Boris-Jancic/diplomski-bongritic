@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: "true"}))
 app.use(cors())
 
 app.use('/reviewers', reviewerRoutes);
-app.use('/clients', clientRoutes);
+app.use('/users', clientRoutes);
 app.use('/posts', postRoutes);
 app.use('/auth', authRoutes);
 

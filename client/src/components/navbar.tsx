@@ -23,16 +23,15 @@ import {
   ChevronRightIcon,
 } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { authAtom } from '../state/auth';
-import { useEffect, useState } from 'react';
 import { AuthenticationService } from '../api/auth/authService';
-import { BsThreeDotsVertical, BsFillPersonFill, BsPlus } from 'react-icons/bs';
-import { RiFileShredLine, RiLogoutCircleRLine } from 'react-icons/ri';
+import { BsThreeDotsVertical, BsFillPersonFill } from 'react-icons/bs';
+import { RiLogoutCircleRLine } from 'react-icons/ri';
 
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
-  const [ client, setClient ] = useRecoilState(authAtom);
+  const [ client ] = useRecoilState(authAtom);
 
   const handleLogOut = () => {
     AuthenticationService.logout()
@@ -80,15 +79,6 @@ export default function Navbar() {
           <ColorModeSwitcher justifySelf="flex-end" />
           { client && (
             <>
-              <Button
-                as={'a'}
-                fontSize={'sm'}
-                fontWeight={400}
-                variant={'solid'}
-                colorScheme={'green'}
-                href={'/games'}>
-                Browse games
-              </Button>
               <Flex justifyContent="center" mt={4}>
                 <Popover placement="bottom" isLazy>
                   <PopoverTrigger>
@@ -109,17 +99,11 @@ export default function Navbar() {
                           rightIcon={<BsFillPersonFill />}
                           justifyContent="space-between"
                           fontWeight="normal"
-                          fontSize="sm">
+                          fontSize="sm"
+                          as="a"
+                          href={`/user/reviews?name=${client.username}`}
+                          >
                           Profile
-                        </Button>
-                        <Button
-                          w="194px"
-                          variant="ghost"
-                          rightIcon={<RiFileShredLine />}
-                          justifyContent="space-between"
-                          fontWeight="normal"
-                          fontSize="sm">
-                          My reviews
                         </Button>
                         <Button
                           w="194px"
