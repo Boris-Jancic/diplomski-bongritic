@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Container, Flex, FormControl, FormHelperText, FormLabel, Grid, GridItem, Heading, IconButton, Image, Input, RangeSliderFilledTrack, RangeSliderMark, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Text, Textarea, toast, useBreakpointValue, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, FormControl, FormLabel, Heading, Image, Input, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Text, Textarea, useToast } from '@chakra-ui/react';
 import { getGame } from '../api/games/gameService';
 import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
 import { authAtom } from '../state/auth';
 import { useRecoilState } from 'recoil';
 import { postReviewerPost } from '../api/blogs/blogService';
-import { error } from 'console';
 
 export default function GameReview() {
     const queryParams = new URLSearchParams(window.location.search);
@@ -19,12 +18,14 @@ export default function GameReview() {
             game: game,
             comment: {
                 title: '',
+                game: '',
                 author: user.name,
                 authorEmail: user.email,
                 avatar: user.avatar,
                 text: '',
                 grade: 0,
                 date: '',
+                approved: false,
                 _id: ''
             },
         }
@@ -33,7 +34,7 @@ export default function GameReview() {
     useEffect(() => {
         getGame(Number(id))
         .then(response => setGame(response.data))
-    }, [])
+    })
 
     const inputHandlerSlider = (grade: number) => {
         post.comment.grade = grade
@@ -49,6 +50,8 @@ export default function GameReview() {
 
     const handleSubmit = async () => {
         post.game = game
+        post.comment.game = game?.name
+
         await postReviewerPost(post)
         .then(response => console.log(response))
         .then(() => window.location.assign('review/success'))
