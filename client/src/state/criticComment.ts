@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import { Blog } from '../interface/post';
 
 const criticCommentAtom = atom({
     key: 'criticComment',
