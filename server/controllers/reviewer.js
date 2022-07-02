@@ -1,10 +1,7 @@
-import mongoose from 'mongoose'
-import bcrypt from "bcryptjs";
 import Reviewer from '../models/reviewer.js'
 
 export const getReviewer = async (req, res) => { 
     const { email } = req.query
-    console.log('pogod ' + email )
     try {
         const reviewer = await Reviewer
         .findOne({'email': email})
@@ -31,7 +28,6 @@ export const getReviewers = async (req, res) => {
 }
 
 export const getAvatar = async (req, res) => { 
-    const { email } = req.query
     try {
         const reviewer = await Reviewer.findBy();
         res.status(200).json(reviewer);
