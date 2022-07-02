@@ -19,8 +19,8 @@ export const loginReviewer = async (req, res) => {
 
         const token = jwt.sign({ 
             email: email,
-            name:reviewer.firstName + ' ' + reviewer.lastName,
-            avatar:reviewer.avatar,
+            name: reviewer.username,
+            avatar: reviewer.avatar,
             role: 'REVIEWER' }, TOKEN_SECRET, { expiresIn: "120s" });
 
         res.status(200).json(token);
