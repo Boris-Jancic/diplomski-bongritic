@@ -1,14 +1,18 @@
 import { Box, Center, Container, Divider, Flex, Heading, Link, Text } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { getRecoil } from 'recoil-nexus'
+import { useRecoilState } from 'recoil'
+import ImageSlider from '../components/imageSlider'
 import { criticCommentAtom } from '../state/criticComment'
 
 export default function CriticCommentView() {
     const [ comment, setComment ] = useRecoilState(criticCommentAtom);
 
+    console.log(comment)
+
     return (
         <Container maxW={'7xl'}>
+            {comment.screenshots.length > 0 && <ImageSlider slides={comment.screenshots} /> }
+            
             <Box>
                 <Flex justifyContent="left" alignItems="center"  fontSize={{sm:'100%', md:'80%', lg:'4xl'}}>
                     <Text

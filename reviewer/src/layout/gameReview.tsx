@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, FormControl, FormLabel, Heading, Image, Input, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Text, Textarea, useToast } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Button, Center, FormControl, FormLabel, Heading, Icon, Image, Input, Slider, SliderFilledTrack, SliderMark, SliderThumb, SliderTrack, Text, Textarea, useToast } from '@chakra-ui/react';
 import { getGame } from '../api/games/gameService';
 import { Blog } from '../interface/post';
 import { Games } from '../interface/game';
@@ -26,16 +26,31 @@ export default function GameReview() {
                 grade: 0,
                 date: '',
                 approved: false,
+                screenshots: [],
                 _id: ''
             },
         }
-    );
-
+    ); 
+    
     useEffect(() => {
         getGame(Number(id))
         .then(response => setGame(response.data))
     })
-
+      
+    const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e?.target?.files;
+        if (files) {
+            post.comment.screenshots = []
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    if(reader.result) post.comment.screenshots.push(reader.result.toString())
+                });
+                reader.readAsDataURL(file);
+            })
+        };
+    }
+    
     const inputHandlerSlider = (grade: number) => {
         post.comment.grade = grade
     }
@@ -51,9 +66,8 @@ export default function GameReview() {
     const handleSubmit = async () => {
         post.game = game
         post.comment.game = game?.name
-
+        console.log(post)
         await postReviewerPost(post)
-        .then(response => console.log(response))
         .then(() => window.location.assign('review/success'))
 
         .catch(error => error.response)
@@ -84,16 +98,16 @@ export default function GameReview() {
 
             <Center>
                 <FormControl width={{ base: '90%', md: '80%', lg: '60%' }}>
-                    <FormLabel htmlFor='title'>Title</FormLabel>
+                    <FormLabel htmlFor='title' mt={5}>Title</FormLabel>
                     <Input type="text" id='title' onChange={(event: React.ChangeEvent<HTMLInputElement>) => titleChangeHandler(event.target.value)}/>
-                    <FormLabel htmlFor='text'>Review text</FormLabel>
+
+                    <FormLabel htmlFor='text' mt={5}>Review text</FormLabel>
                     <Textarea
                         id='text' 
                         //@ts-ignore
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => textChangeHandler(event.target.value)} />
                         
-                    <FormLabel htmlFor='grade'>Grade</FormLabel>
-                    
+                    <FormLabel htmlFor='grade' mt={5}>Grade</FormLabel>
                     <Slider aria-label='slider-ex-1' colorScheme='green' id='grade' defaultValue={1} min={1} max={5}
                         onChange={(value: number) => inputHandlerSlider(value)} >
                         <SliderMark value={1} mt='1' ml='-2.5' fontSize='sm'>
@@ -117,6 +131,15 @@ export default function GameReview() {
                         <SliderThumb color='green.900' />
                     </Slider>
 
+                    <FormLabel mt={5}>File input</FormLabel>
+                    <Input
+                        variant='filled'
+                        type="file"
+                        accept={'image/*'}
+                        multiple={true}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFileInput(e)}
+                    />
+
                     <Button 
                         mt={4}
                         width='200px' 
@@ -129,6 +152,7 @@ export default function GameReview() {
                         onClick={() => handleSubmit()}>
                         Review
                     </Button>
+
                 </FormControl>
             </Center>
         </Box>
