@@ -91,6 +91,21 @@ export module Games {
         slug: string;
     }
 
+    export interface ScreenshotData {
+        count: number
+        next: string,
+        previous: string,
+        results: Screenshot[]
+    }
+
+    export interface Screenshot {
+        id: number,
+        image: string,
+        width: number,
+        height: number,
+        is_deleted: boolean
+    }
+
     export interface ShortScreenshot {
         id: number;
         image: string;
@@ -156,6 +171,7 @@ export module Games {
         developers: Developer[];
         publishers: Publisher[];
         parent_platforms: ParentPlatform[];
+        short_screenshots: ShortScreenshot[]
         stores: Store[]
         seo_title: string;
         released: string;

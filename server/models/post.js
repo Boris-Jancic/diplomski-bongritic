@@ -14,6 +14,9 @@ const postSchema = mongoose.Schema({
             grade: Number,
             date: String,
             approved: Boolean,
+            screenshots: [{
+                type: String
+            }]
         }
     ],
     userComments: [
