@@ -39,6 +39,7 @@ export module Blog {
         grade: number;
         date: string;
         approved: boolean;
+        screenshots: Array<String>;
         _id: string;
     }
 
