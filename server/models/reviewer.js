@@ -37,6 +37,9 @@ const reviewerSchema = mongoose.Schema({
     activated:{
         type: Boolean,
     },
+    awaitingApproval:{
+        type: Boolean,
+    },
 }, {
     timestamps: true
 })
