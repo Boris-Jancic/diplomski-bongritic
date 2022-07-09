@@ -76,10 +76,12 @@ export module Blog {
         firstName: string;
         lastName: string;
         username: string;
+        jmbg: string;
         email: string;
         avatar: string;
         biography: string;
         createdAt: string;
+        activated: boolean;
     }
 
     export interface Client {
