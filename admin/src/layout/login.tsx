@@ -75,7 +75,7 @@ export default function Login() {
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
-          <Heading fontSize={'2xl'}>Sign in to your account</Heading>
+          <Heading fontSize={'2xl'}>Admin sign in</Heading>
           <FormControl id="email" isInvalid={errors.email}>
             <FormLabel>Email address</FormLabel>
             <Input type="email"  onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputHandler(e, 'email')}/>
@@ -89,13 +89,11 @@ export default function Login() {
               direction={{ base: 'column', sm: 'row' }}
               align={'start'}
               justify={'space-between'}>
-              <Link color={'green.300'}>Forgot password?</Link>
             </Stack>
             <Button colorScheme={'green'} variant={'solid'} 
               onClick={() => handleLogin()}>
               Sign in
             </Button>
-            <Link color={'green.500'} href="/register">Not registered? Sign up here!</Link>
           </Stack>
         </Stack>
       </Flex>

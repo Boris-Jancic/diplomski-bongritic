@@ -14,7 +14,7 @@ const BASE_URL = process.env.REACT_APP_API_KEY
 
 async function login(userCredentials: any, toast: any) {
     try {
-        await AxiosClient.post(`${BASE_URL}/auth/reviewer/login`, userCredentials)
+        await AxiosClient.post(`${BASE_URL}/auth/admin/login`, userCredentials)
             .then(function (response) {
                 let decoded_token = TokenService.decodeToken(response.data);
                 if (decoded_token) {
