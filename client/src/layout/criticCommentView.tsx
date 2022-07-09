@@ -1,7 +1,7 @@
 import { Box, Center, Container, Divider, Flex, Heading, Link, Text } from '@chakra-ui/react'
 import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { getRecoil } from 'recoil-nexus'
+import { useRecoilState } from 'recoil'
+import ImageSlider from '../components/imageSlider'
 import { criticCommentAtom } from '../state/criticComment'
 
 export default function CriticCommentView() {
@@ -9,6 +9,8 @@ export default function CriticCommentView() {
 
     return (
         <Container maxW={'7xl'}>
+            {comment.screenshots.length > 0 && <ImageSlider key={comment.screenshots.length} slides={comment.screenshots} /> }
+            
             <Box>
                 <Flex justifyContent="left" alignItems="center"  fontSize={{sm:'100%', md:'80%', lg:'4xl'}}>
                     <Text
@@ -31,7 +33,7 @@ export default function CriticCommentView() {
                 <Divider />
                 <Center my={5}>
                     <Flex justifyContent="left" alignItems="center">
-                        <Text width={{sm:'100%', md:'100%', lg:'100%'}} fontSize='md' fontFamily='helvetica' >{comment.text}</Text>
+                        <Text width={{sm:'100%', md:'100%', lg:'100%'}} fontSize={{base:'xs', md: 'md', lg: 'lg' }} fontFamily='helvetica'  textAlign='left'>{comment.text}</Text>
                     </Flex>
                 </Center>
                 <Divider />

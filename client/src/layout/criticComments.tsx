@@ -42,7 +42,7 @@ export default function ReviewerComments() {
       {!responseData ? <Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text> : (
         responseData.length === 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
         responseData.map((post: any) => {
-            if (post.reviewerComments.length === 0) return
+            if (post.reviewerComments.length === 0) return (<> </>)
             return ( <ReviewCard key={post.reviewerComments[0]._id} comment={post.reviewerComments[0]} /> )
           })
         )
