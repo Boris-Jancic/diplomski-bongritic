@@ -63,8 +63,7 @@ export const getPost = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const { authorization } = req.headers 
-    if (authorization !== "REVIEWER") res.status(403).json({ message: error.message });
+    console.log(req.body)
     const comment = {
         game: req.body.comment.game,
         author: req.body.comment.author,
@@ -73,6 +72,7 @@ export const createPost = async (req, res) => {
         avatar: req.body.comment.avatar,
         text: req.body.comment.text,
         grade: req.body.comment.grade,
+        screenshots: req.body.comment.screenshots,
         date: new Date().toLocaleDateString(),
         approved: false
     }
