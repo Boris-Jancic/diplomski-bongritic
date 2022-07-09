@@ -1,11 +1,14 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {TokenService} from "./tokenService";
 import {AuthenticationService} from "../auth/authService";
 
 const AxiosClient = axios.create();
 
+AxiosClient.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+AxiosClient.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+
 // If the user is logged in attach the token for every api call
-AxiosClient.interceptors.request.use(function success(config) {
+AxiosClient.interceptors.request.use(function success(config: AxiosRequestConfig) {
     const user = TokenService.getUserFromToken()
     if (user) {
         if (TokenService.didTokenExpire()) {
@@ -15,7 +18,6 @@ AxiosClient.interceptors.request.use(function success(config) {
         }
         //@ts-ignore
         config.headers["Authorization"] = user.role;
-
     }
     return config;
 });
