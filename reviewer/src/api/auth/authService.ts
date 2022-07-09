@@ -64,7 +64,6 @@ function getRole() {
 }
 
 async function registerReviewer(reviewer: any, toast: any) {
-    console.log(reviewer)
     try {
         await AxiosClient.post(`${BASE_URL}/auth/reviewer/register`, reviewer)
             .then(function (response) {
