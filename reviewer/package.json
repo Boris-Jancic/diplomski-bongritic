@@ -1,6 +1,7 @@
 {
   "name": "app",
   "version": "0.1.0",
+  "proxy": "https://thingproxy.freeboard.io/fetch/",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -25,6 +26,7 @@
     "react-dom": "^17.0.2",
     "react-file-base64": "^1.0.3",
     "react-icons": "^3.11.0",
+    "react-multiple-image-input": "^1.0.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
