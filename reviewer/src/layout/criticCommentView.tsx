@@ -7,8 +7,6 @@ import { criticCommentAtom } from '../state/criticComment'
 export default function CriticCommentView() {
     const [ comment, setComment ] = useRecoilState(criticCommentAtom);
 
-    console.log(comment)
-
     return (
         <Container maxW={'7xl'}>
             {comment.screenshots.length > 0 && <ImageSlider slides={comment.screenshots} /> }
@@ -35,7 +33,7 @@ export default function CriticCommentView() {
                 <Divider />
                 <Center my={5}>
                     <Flex justifyContent="left" alignItems="center">
-                        <Text width={{sm:'100%', md:'100%', lg:'100%'}} fontSize='md' fontFamily='helvetica' >{comment.text}</Text>
+                        <Text width={{sm:'100%', md:'100%', lg:'100%'}} fontSize={{base:'xs', md: 'md', lg: 'lg' }} fontFamily='helvetica'  textAlign='left'>{comment.text}</Text>
                     </Flex>
                 </Center>
                 <Divider />
