@@ -64,9 +64,9 @@ export default function Navbar() {
         </Flex>
           
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-            Bongritic - ADMIN PANEL
+            Bongritic Admin view
           <Flex display={{ base: 'none', md: 'flex' }} ml={5}>
-            <DesktopNav />
+            { client && <DesktopNav /> }
           </Flex>
         </Flex>
 
@@ -79,15 +79,6 @@ export default function Navbar() {
           <ColorModeSwitcher justifySelf="flex-end" />
           { client && (
             <>
-              <Button
-                as={'a'}
-                fontSize={'sm'}
-                fontWeight={400}
-                variant={'solid'}
-                colorScheme={'green'}
-                href={'/games'}>
-                Browse games
-              </Button>
               <Flex justifyContent="center" mt={4}>
                 <Popover placement="bottom" isLazy>
                   <PopoverTrigger>
@@ -130,7 +121,7 @@ export default function Navbar() {
               </Flex>
             </>
           )}
-          { !client && (
+          {!client && (
             <>
               <Button
                 as={'a'}
@@ -140,21 +131,13 @@ export default function Navbar() {
                 href={'/login'}>
                 Sign In
               </Button>
-              <Button
-                as={'a'}
-                fontSize={'sm'}
-                fontWeight={400}
-                variant={'ghost'}
-                href={'/register'}>
-                Sign up
-              </Button>
             </>
           )}
         </Stack>
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
-        <MobileNav />
+        {client && <MobileNav /> }
       </Collapse>
     </Box>
   );
@@ -247,7 +230,7 @@ const MobileNav = () => {
       bg={useColorModeValue('white', 'gray.800')}
       p={4}
       display={{ md: 'none' }}>
-      {NAV_ITEMS.map((navItem) => (
+      { NAV_ITEMS.map((navItem) => (
         <MobileNavItem key={navItem.label} {...navItem} />
       ))}
     </Stack>
@@ -330,7 +313,7 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'Registration requests',
         subLabel: 'Approve or deny reviwer registration requests',
-        href: '#',
+        href: '/critic/view/registration',
       },
       {
         label: 'Comment approval',

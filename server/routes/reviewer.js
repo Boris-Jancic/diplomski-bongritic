@@ -1,6 +1,6 @@
 import express from "express"
-import { getReviewer, getReviewers, getAvatar, alterReviewerAccess } from "../controllers/reviewer.js"
-import { check, validationResult } from "express-validator";
+import { getReviewer, getReviewers, getNotApprovedReviewers, getAvatar, alterReviewerAccess, manageReviewerRegistrationRequest } from "../controllers/reviewer.js"
+import { check } from "express-validator";
 import { getReviewerComments } from "../controllers/posts.js"
 import { checkAdmin, badRequestHandler } from "./security.js"
 
@@ -13,13 +13,16 @@ router.get('/',
     .trim()
     , getReviewer)
 
-router.get('/paged', getReviewers)
+router.get('/paged', checkAdmin, badRequestHandler, getReviewers)
+
+router.get('/registration', badRequestHandler,getNotApprovedReviewers)
 
 router.get('/comments', getReviewerComments)
 
 router.get('/avatar', check('name').isString().isEmpty(), getAvatar)
 
-router.put('/access',  
-    alterReviewerAccess)
+router.put('/registration', badRequestHandler, manageReviewerRegistrationRequest)
+
+router.put('/access',  badRequestHandler, alterReviewerAccess)
 
 export default router

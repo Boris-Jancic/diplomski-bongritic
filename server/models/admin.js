@@ -1,21 +1,10 @@
 import mongoose from 'mongoose'
 
 const adminSchema = mongoose.Schema({
-    firstName: {
-        type: String,
-    },
-    secondName:{
-        type: String,
-    },
-    jmbg: {
-        type: String,
-        required: true,
-        unique:true
-    },
     email: {
         type: String,
         required: true,
-        unique:true
+        unique: true
     },
     password: {
         type: String,
@@ -25,6 +14,6 @@ const adminSchema = mongoose.Schema({
     timestamps: true
 })
 
-const client = mongoose.model('client', adminSchema)
+const Admin = mongoose.model('admin', adminSchema)
 
-export default client
+export default Admin

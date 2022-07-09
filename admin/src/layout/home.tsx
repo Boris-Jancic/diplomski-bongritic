@@ -29,22 +29,6 @@ export default function Home() {
             we don't do paid game reviews.
             Keep track of your reviews and view others.
           </Text>
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-              <Button
-                rounded={'full'}
-                as={'a'}
-                fontSize={'sm'}
-                fontWeight={400}
-                variant={'solid'}
-                colorScheme={'green'}
-              _hover={{
-                bg: 'green.700',
-              }}
-                href={'/game/review'}>
-                Review a game
-              </Button>
-            <Button rounded={'full'}>How It Works</Button>
-          </Stack>
         </Stack>
       </Flex>
       <Flex flex={1}>
