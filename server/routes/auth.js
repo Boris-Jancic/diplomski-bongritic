@@ -2,6 +2,7 @@ import express from "express"
 import { check, validationResult } from "express-validator";
 import { loginReviewer, registerReviewer } from "../controllers/authReviewer.js"
 import { loginClient, registerClient } from "../controllers/authClient.js"
+import { loginAdmin } from "../controllers/authAdmin.js";
 
 const router = express.Router()
 
@@ -61,5 +62,7 @@ router.post('/reviewer/register',
 
 router.post('/client/login', loginClient)
 router.post('/client/register', registerClient)
+
+router.post('/admin/login', loginAdmin)
 
 export default router
