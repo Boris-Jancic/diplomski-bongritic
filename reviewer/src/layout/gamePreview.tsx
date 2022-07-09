@@ -1,37 +1,10 @@
-
-
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Container, Flex, Grid, GridItem, Heading, IconButton, Image, Text, useBreakpointValue } from '@chakra-ui/react';
-// Here we have used react-icons package for the icons
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
-// And react-slick as our Carousel Lib
-import Slider from 'react-slick';
+import { Box, Button, Center, Flex, Heading, Image, Text, useBreakpointValue } from '@chakra-ui/react';
 import { Games } from '../interface/game';
 import { getGame } from '../api/games/gameService';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 
-// Settings for the slider
-const settings = {
-  dots: true,
-  arrows: false,
-  fade: true,
-  infinite: true,
-  autoplay: true,
-  speed: 500,
-  autoplaySpeed: 5000,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-};
-
 export default function GamePreview() {
-  // As we have used custom buttons, we need a reference variable to
-  // change the state
-  const [slider, setSlider] = React.useState<Slider | null>(null);
-
-  // These are the breakpoints which changes the position of the
-  // buttons as the screen size changes
-  const top = useBreakpointValue({ base: '90%', md: '50%' });
-  const side = useBreakpointValue({ base: '30%', md: '10px' });  
   const queryParams = new URLSearchParams(window.location.search);
   const [game, setGame] = useState<Games.GameData>()
 
@@ -41,10 +14,6 @@ export default function GamePreview() {
     getGame(Number(id))
     .then(response => setGame(response.data))
   }, [])
-
-  // These are the images used in the slide
-  const cards = [game?.background_image, game?.background_image_additional];
-  console.log(game)
 
   return (
     <Box>

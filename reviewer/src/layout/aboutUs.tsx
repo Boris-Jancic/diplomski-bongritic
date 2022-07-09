@@ -1,6 +1,5 @@
 import { Box, Container, Divider, Flex, Heading, HStack, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import React from 'react'
-import XboxJoystick from '../images/xboxjoystick.jpg'
 import Gamer from '../images/gamer.jpg'
 import SmallGamer from '../images/smallGamer.jpg'
 import Keyboard from '../images/keyboard.jpg'

@@ -78,7 +78,6 @@ export default function RegisterClient() {
     !client.avatar ? errors.avatar = true : errors.avatar = false 
   }
 
-  // Pop up toast
   const responseToast = (message: String, status: any) => {
     toast({
       title: message,
@@ -88,7 +87,6 @@ export default function RegisterClient() {
     })
   }
 
-  // Handles registration of clients
   const handleRegister = () => {
     validationSchema.isValid(reviewer)
       .then(function (valid) {
@@ -96,7 +94,6 @@ export default function RegisterClient() {
       })
   }
   
-  // Handles file change
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e?.target?.files;
     if (files) {
