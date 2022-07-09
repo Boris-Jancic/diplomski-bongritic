@@ -325,7 +325,7 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'View reviewers',
         subLabel: 'See and if needed, block reviewers',
-        href: '#',
+        href: '/critic/view',
       },
       {
         label: 'Registration requests',

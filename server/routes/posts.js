@@ -1,5 +1,5 @@
 import express from "express"
-import { check, validationResult, header } from "express-validator";
+import { check } from "express-validator";
 import { 
     createPost,
     getLatestPost,

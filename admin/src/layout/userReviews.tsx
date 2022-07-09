@@ -15,7 +15,6 @@ import {
   Container,
   VStack,
 } from '@chakra-ui/react';
-import { TokenService } from '../api/client/tokenService';
 
 interface IBlogTags {
   tags: Array<string>;

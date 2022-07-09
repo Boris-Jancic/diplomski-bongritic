@@ -12,16 +12,40 @@ export const getReviewer = async (req, res) => {
         .select('createdAt')
         .select('biography')
         .exec()
-        res.status(200).json(reviewer);
+        return res.status(200).json(reviewer);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 }
 
 export const getReviewers = async (req, res) => { 
+    const { page = 1, limit = 1, createdAt = -1 } = req.query
     try {
-        const reviewer = await Reviewer.find();
-        res.status(200).json(reviewer);
+        const count = await Reviewer.countDocuments()
+        const reviewers = await Reviewer.find()
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .sort({"createdAt": createdAt})
+
+        return res.status(200).json({
+            currentPage: Math.ceil(page),
+            totalPages: Math.ceil(count / limit),
+            reviewers: reviewers
+        });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}
+
+export const alterReviewerAccess = async (req, res) => {
+    const { username } = req.query
+    try {
+        const reviewer = await Reviewer.findOne({'username': username}).exec()
+        
+        reviewer.activated ? reviewer.activated = false : reviewer.activated = true
+        
+        reviewer.save()
+        return res.status(200).json({message: "Successfully updated reviewer"});
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -30,7 +54,7 @@ export const getReviewers = async (req, res) => {
 export const getAvatar = async (req, res) => { 
     try {
         const reviewer = await Reviewer.findBy();
-        res.status(200).json(reviewer);
+        return res.status(200).json(reviewer);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
