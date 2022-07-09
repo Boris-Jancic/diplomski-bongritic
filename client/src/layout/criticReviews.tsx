@@ -80,7 +80,6 @@ const CriticReviews = () => {
     .then((res: any)=> setPostResponse(res.data))
   }, [createdAt])
 
-  console.log(postResponse)
 
   const debouncedSearch = debounce(async (criteria: string) => {
     if (criteria === "") { getPosts(1, 8, createdAt).then((res: any)=> setPostResponse(res.data)) }
@@ -115,10 +114,10 @@ const CriticReviews = () => {
             zIndex="2"
             marginLeft={{ base: '0', sm: '5%' }}
             marginTop="5%">
-            <Link textDecoration="none" _hover={{ textDecoration: 'none' }} href={`/post/view?id=${latestPost._id}`}>
+            <Link textDecoration="none" _hover={{ textDecoration: 'none' }} href={`/post/view?id=${latestPost?._id}`}>
               <Image
                 borderRadius="lg"
-                src={latestPost.game?.background_image}
+                src={latestPost?.game?.background_image}
                 alt="some good alt text"
                 objectFit="contain"
               />
@@ -147,10 +146,10 @@ const CriticReviews = () => {
           </Stack>
           <Heading marginTop="1"  textAlign='left'>
             <Link textDecoration="none" _hover={{ textDecoration: 'none' }}>
-              {latestPost.game?.name}
+              {latestPost?.game?.name}
             </Link>
           </Heading>
-          <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} /> 
+          {latestPost && <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} />}
         </Box>
       </Box>
       <Divider marginTop={100} />
