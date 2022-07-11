@@ -1,7 +1,6 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, useToast, Image, Spinner } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { getNotApprovedComments, updateCommentStatus } from '../../api/blogs/blogService'
-import { getNotApprovedReviewers } from '../../api/reviewers/reviewerService'
+import { getNotApprovedComments, updateReviewerCommentStatus } from '../../api/blogs/blogService'
 import CommentViewModal from '../../components/modals/commentViewModal'
 import DenyCommentModal from '../../components/modals/denyCommentModal'
 import { Blog } from '../../interface/post'
@@ -15,7 +14,7 @@ export default function CommentApprovalTable() {
     }, [])
 
     const handleApprovalClick = async (comment: Blog.ReviewerComment) => {
-        updateCommentStatus({'game': comment.game, 'commentId': comment._id, 'approved': true})
+        updateReviewerCommentStatus({'game': comment.game, 'commentId': comment._id, 'approved': true})
         .then((res: any) => {
             toast({
                 title: res.data.message,
@@ -29,7 +28,7 @@ export default function CommentApprovalTable() {
     }
 
     const handleCommentDenial = (comment: Blog.ReviewerComment, answer: string) => {
-        updateCommentStatus({'game': comment.game, 'commentId': comment._id, 'email': comment.authorEmail, 'approved': false, 'answer': answer })
+        updateReviewerCommentStatus({'game': comment.game, 'commentId': comment._id, 'email': comment.authorEmail, 'approved': false, 'answer': answer })
         .then((res: any) => {
                 toast({
                     title: res.data.message,

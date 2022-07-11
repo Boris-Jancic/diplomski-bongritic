@@ -1,6 +1,5 @@
 import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, Textarea, FormLabel, Flex, useToast } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { updateCommentStatus } from "../../api/blogs/blogService"
 import { Blog } from "../../interface/post"
 
 export default function DenyCommentModal(props: {comment: Blog.ReviewerComment, handleCommentDenial: Function}) {

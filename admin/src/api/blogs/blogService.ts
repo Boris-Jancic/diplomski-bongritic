@@ -25,4 +25,6 @@ export const getUserAverageGrade = async (gameId: string) => await AxiosClient.g
 
 export const getNotApprovedComments = async () => await AxiosClient.get<Array<Blog.ReviewerComment>>(`${BASE_URL}/posts/not-approved/comments`)
 
-export const updateCommentStatus = async (updateComment: any) => await AxiosClient.put<any>(`${BASE_URL}/posts/comment/approval`, updateComment)
+export const updateReviewerCommentStatus = async (updateComment: any) => await AxiosClient.put<any>(`${BASE_URL}/posts/comment/approval`, updateComment)
+
+export const updateUserCommentStatus = async (updateComment: any) => await AxiosClient.put<any>(`${BASE_URL}/posts/comment/approval`, updateComment)
