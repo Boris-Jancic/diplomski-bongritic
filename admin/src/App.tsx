@@ -11,7 +11,6 @@ import Footer from "./components/footer"
 import { Routes, Route } from "react-router-dom";
 import Login from "./layout/login"
 import CriticReviews from "./layout/criticReviews"
-import UserReviews from "./layout/userReviews"
 import Home from "./layout/home"
 import BrowseGames from "./layout/browseGames"
 import NotFound from "./layout/notFound"
@@ -25,6 +24,7 @@ import ReviewerTable from "./layout/tables/reviewerTable"
 import NotApprovedReviewerTable from "./layout/tables/notApprovedReviewersTable"
 import CommentApprovalTable from "./layout/tables/commentApprovalTable"
 import UserTable from "./layout/tables/userTable"
+import ReportedCommentTable from "./layout/tables/reportedCommentsTable"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -42,7 +42,6 @@ export const App = () => (
           <Route path="/login" element={<Login />} />
           
           <Route path="/reviews/critics" element={<CriticReviews />} />
-          <Route path="/reviews/users" element={<UserReviews />} />
 
           <Route path="/games" element={<BrowseGames />} />
           <Route path="/games/review/success" element={<SuccessfullPost />} />
@@ -55,8 +54,9 @@ export const App = () => (
           <Route path="/critics/view/registration" element={<NotApprovedReviewerTable />} />
           <Route path="/critics/comment/approval" element={<CommentApprovalTable />} />
           
-          <Route path="/users/view" element={<UserTable />} />
           <Route path="/user/reviews" element={<UserComments />} />
+          <Route path="/users/view" element={<UserTable />} />
+          <Route path="/users/reported/comments" element={<ReportedCommentTable />} />
           
           <Route path="/about" element={<AboutUs />}></Route>
 
