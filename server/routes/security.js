@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 export function checkClient(req, res, next) {
     const { authorization } = req.headers 
 
-    if (authorization !== "CLIENT") return res.status(403).json({ message: error.message });
+    if (authorization !== "CLIENT") return res.status(403).json({ message: 'You lack authorization !' });
 
     return next();
 }
@@ -11,7 +11,7 @@ export function checkClient(req, res, next) {
 export function checkReviewer(req, res, next) {
     const { authorization } = req.headers 
     
-    if (authorization !== "REVIEWER") return res.status(403).json({ message: error.message });
+    if (authorization !== "REVIEWER") return res.status(403).json({ message: 'You lack authorization !' });
 
     return next();
 }
@@ -19,7 +19,7 @@ export function checkReviewer(req, res, next) {
 export function checkAdmin(req, res, next) {
     const { authorization } = req.headers 
     
-    if (authorization !== "ADMIN") return res.status(403).json({ message: error.message });
+    if (authorization !== "ADMIN") return res.status(403).json({ message: 'You lack authorization !' });
 
     return next();
 }

@@ -2,8 +2,6 @@ import nodemailer from 'nodemailer'
 import { AUTH_MAILER_EMAIL, AUTH_MAILER_PASS } from '../server.js';
 
 export default async function mailToClient(reciever, title, message) {
-  console.log(AUTH_MAILER_EMAIL)
-  console.log(AUTH_MAILER_PASS)
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,

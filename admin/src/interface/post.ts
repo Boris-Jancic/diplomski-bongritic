@@ -30,7 +30,7 @@ export module Blog {
     }
 
     export interface ReviewerComment {
-        game?: string;
+        game: string;
         author: string;
         authorEmail: string;
         avatar: string;
@@ -39,8 +39,14 @@ export module Blog {
         grade: number;
         date: string;
         approved: boolean;
-        screenshots: Array<String>;
+        screenshots: Array<string>;
         _id: string;
+    }
+
+    export interface CommentResponseData {
+        totalPages: number;
+        currentPage: number;
+        comments: ReviewerComment[];
     }
 
     export interface UserComment {
