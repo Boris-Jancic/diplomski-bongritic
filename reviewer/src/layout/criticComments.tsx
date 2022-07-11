@@ -38,13 +38,13 @@ export default function ReviewerComments() {
 
       <Divider my={15} />
       <Heading as='h4' size='lg'>{reviewer?.username}'s comments</Heading>
+      <Divider my={15} />
       
-      {!responseData ? <Text fontSize={'md'} textDecor={'underline'}>This game doesen't have any critic reviews yet</Text> : (
-        responseData.length === 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
-        responseData.map((post: any) => {
-            if (post.reviewerComments.length === 0) return (<> </>)
-            return ( <ReviewCard key={post.reviewerComments[0]._id} comment={post.reviewerComments[0]} /> )
-          })
+      {!responseData ? <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : (
+        responseData.length === 0 ?  <Text fontSize={'md'} textDecor={'underline'}>This critic has not made any reviews yet</Text> : 
+          responseData.map((post: any) => {
+              return ( <ReviewCard key={post.reviewerComments[0]._id} comment={post.reviewerComments[0]} /> )
+            })
         )
       }
     </Box>

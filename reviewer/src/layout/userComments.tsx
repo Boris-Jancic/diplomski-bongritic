@@ -16,16 +16,16 @@ export default function UserComments() {
 
   return (
     <Box>
-        <Heading>{username}'s comments</Heading>
+        <Heading my={5}>{username}'s comments</Heading>
 
         <Divider m={2}/>
         
-        {!responseData ? <Text fontSize={'md'} textDecor={'underline'}>This user doesen't have any reviews yet</Text> : (
-        responseData.length === 0 ?  <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : 
-            responseData.map((post: any) => {
-                return ( <UserCard key={post.userComments[0]._id} comment={post.userComments[0]} /> )
-                })
-            )
+        {!responseData ? <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : (
+          responseData.length === 0 ?  <Text fontSize={'md'} textDecor={'underline'}>This user doesen't have any comments yet</Text> : 
+              responseData.map((post: any) => {
+                  return ( <UserCard key={post.userComments[0]._id} comment={post.userComments[0]} /> )
+                  })
+              )
         }
 
         <Divider m={2}/>
