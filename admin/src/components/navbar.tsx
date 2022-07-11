@@ -331,9 +331,9 @@ const NAV_ITEMS: Array<NavItem> = [
         href: '/users/view',
       },
       {
-        label: 'Flaged comments',
-        subLabel: 'See and manage flaged user comments',
-        href: '/users/flagged/comments',
+        label: 'Reported comments',
+        subLabel: 'See and manage reported user comments',
+        href: '/users/reported/comments',
       },
     ],
   },
