@@ -12,17 +12,12 @@ router.get('/',
     .isString()
     .trim()
     , getReviewer)
-
 router.get('/paged', checkAdmin, badRequestHandler, getReviewers)
-
 router.get('/registration', badRequestHandler,getNotApprovedReviewers)
-
 router.get('/comments', getReviewerComments)
-
 router.get('/avatar', check('name').isString().isEmpty(), getAvatar)
 
 router.put('/registration', badRequestHandler, manageReviewerRegistrationRequest)
-
-router.put('/access',  badRequestHandler, alterReviewerAccess)
+router.put('/access', checkAdmin, badRequestHandler, alterReviewerAccess)
 
 export default router
