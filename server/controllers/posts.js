@@ -245,7 +245,6 @@ export const updateCommentStatus = async (req, res) => {
     const data = req.body
     try {
         const post = await Post.findOne({'game.name': data.game}).exec()
-
         const filteredComments = []
         if (data.approved) {
             post.reviewerComments.forEach(comment => {

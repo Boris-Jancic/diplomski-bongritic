@@ -2,7 +2,7 @@ import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, Butto
 import React, { useEffect, useState } from 'react'
 import { getReviewers, updateReviewerAccess } from '../../api/reviewers/reviewerService'
 import Paginator from '../../components/pagination'
-import ReviewerModal from '../../components/reviewerModal'
+import ReviewerModal from '../../components/modals/reviewerModal'
 import { Blog } from '../../interface/post'
 import { Reviewers } from '../../interface/reviewers'
 
