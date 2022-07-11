@@ -12,7 +12,6 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./layout/login"
 import RegisterClient from "./layout/registerCritic"
 import CriticReviews from "./layout/criticReviews"
-import UserReviews from "./layout/userReviews"
 import Home from "./layout/home"
 import NotFound from "./layout/notFound"
 import SuccessfullPost from "./layout/succesFullBlogPost"
@@ -37,13 +36,18 @@ export const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterClient />} />
+
           <Route path="/reviews/critics" element={<CriticReviews />} />
-          <Route path="/reviews/users" element={<UserReviews />} />
+
           <Route path="/games/review/success" element={<SuccessfullPost />} />
+
           <Route path="/post/view" element={<PostView />} />
           <Route path="/post/review/critic" element={<CriticCommentView />} />
+
           <Route path="/critic/reviews" element={<ReviewerComments />} />
+
           <Route path="/user/reviews" element={<UserComments />} />
+          
           <Route path="/about" element={<AboutUs />}></Route>
 
         </Routes>
