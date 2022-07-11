@@ -10,8 +10,9 @@ import {
     getAverageGradesUser,
     getPostByGameName,
     reportUserComment,
-    updateCommentStatus,
-    getNotApprovedComments
+    updateReviewerCommentStatus,
+    getNotApprovedComments,
+    updateUserCommentStatus
 } from "../controllers/posts.js"
 import { checkClient, checkReviewer, checkAdmin, badRequestHandler } from "./security.js"
 
@@ -55,6 +56,7 @@ router.post('/user/comment/report',
     checkClient,
     reportUserComment)
 
-router.put('/comment/approval', updateCommentStatus)
+router.put('/comment/approval', updateReviewerCommentStatus)
+router.put('/user/comment/update', updateUserCommentStatus)
 
 export default router

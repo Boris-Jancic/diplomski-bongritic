@@ -19,7 +19,7 @@ export function checkReviewer(req, res, next) {
 export function checkAdmin(req, res, next) {
     const { authorization } = req.headers 
     
-    if (authorization !== "ADMIN") return res.status(403).json({ message: 'You lack authorization !' });
+    if (authorization !== 'ADMIN') res.status(403).json({ message: 'You lack authorization !' });
 
     return next();
 }
