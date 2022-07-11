@@ -308,17 +308,17 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'View reviewers',
         subLabel: 'See and if needed, block reviewers',
-        href: '/critic/view',
+        href: '/critics/view',
       },
       {
         label: 'Registration requests',
         subLabel: 'Approve or deny reviwer registration requests',
-        href: '/critic/view/registration',
+        href: '/critics/view/registration',
       },
       {
         label: 'Comment approval',
         subLabel: 'See and approve or deny reviewer comments',
-        href: '/critic/comment/approval',
+        href: '/critics/comment/approval',
       },
     ],
   },
@@ -328,12 +328,12 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'View users',
         subLabel: 'See and if needed, block users',
-        href: '#',
+        href: '/users/view',
       },
       {
         label: 'Flaged comments',
         subLabel: 'See and manage flaged user comments',
-        href: '#',
+        href: '/users/flagged/comments',
       },
     ],
   },

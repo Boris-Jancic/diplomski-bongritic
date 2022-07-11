@@ -91,6 +91,10 @@ export module Blog {
     }
 
     export interface Client {
-        
+        username: string;
+        email: string;
+        activated: boolean;
+        createdAt: string;
+        _id: string;
     }
 }

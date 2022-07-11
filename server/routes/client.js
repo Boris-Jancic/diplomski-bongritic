@@ -1,10 +1,11 @@
 import express from "express"
-import { getReviewer, getReviewers, getAvatar } from "../controllers/reviewer.js"
-import { check, validationResult } from "express-validator";
-import { getUserComments } from "../controllers/posts.js"
+import { getClients, updateClientAccess } from "../controllers/clients.js";
+import { badRequestHandler, checkAdmin } from "./security.js";
 
 const router = express.Router()
 
-router.get('/comments', getUserComments)
+router.get('/paged', checkAdmin, badRequestHandler, getClients)
+
+router.put('/access', updateClientAccess)
 
 export default router

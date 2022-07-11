@@ -24,6 +24,7 @@ import UserComments from "./layout/userComments"
 import ReviewerTable from "./layout/tables/reviewerTable"
 import NotApprovedReviewerTable from "./layout/tables/notApprovedReviewersTable"
 import CommentApprovalTable from "./layout/tables/commentApprovalTable"
+import UserTable from "./layout/tables/userTable"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -39,17 +40,24 @@ export const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          
           <Route path="/reviews/critics" element={<CriticReviews />} />
           <Route path="/reviews/users" element={<UserReviews />} />
+
           <Route path="/games" element={<BrowseGames />} />
           <Route path="/games/review/success" element={<SuccessfullPost />} />
+          
           <Route path="/post/view" element={<PostView />} />
           <Route path="/post/review/critic" element={<CriticCommentView />} />
+          
           <Route path="/critic/reviews" element={<ReviewerComments />} />
-          <Route path="/critic/view" element={<ReviewerTable />} />
-          <Route path="/critic/view/registration" element={<NotApprovedReviewerTable />} />
-          <Route path="/critic/comment/approval" element={<CommentApprovalTable />} />
+          <Route path="/critics/view" element={<ReviewerTable />} />
+          <Route path="/critics/view/registration" element={<NotApprovedReviewerTable />} />
+          <Route path="/critics/comment/approval" element={<CommentApprovalTable />} />
+          
+          <Route path="/users/view" element={<UserTable />} />
           <Route path="/user/reviews" element={<UserComments />} />
+          
           <Route path="/about" element={<AboutUs />}></Route>
 
         </Routes>
