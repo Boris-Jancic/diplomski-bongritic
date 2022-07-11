@@ -15,7 +15,7 @@ export const getReviewer = async (req, res) => {
         .exec()
         return res.status(200).json(reviewer);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -34,7 +34,7 @@ export const getReviewers = async (req, res) => {
             reviewers: reviewers
         });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -53,9 +53,8 @@ export const getNotApprovedReviewers = async (req, res) => {
             reviewers: reviewers
         });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
-    
 }
 
 export const manageReviewerRegistrationRequest = async (req, res) => {
@@ -72,7 +71,7 @@ export const manageReviewerRegistrationRequest = async (req, res) => {
         }
         return res.status(200).json({message: "Successfully updated reviewer"});
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -92,7 +91,7 @@ export const alterReviewerAccess = async (req, res) => {
         reviewer.save()
         return res.status(200).json({message: "Successfully updated reviewer"});
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -101,6 +100,6 @@ export const getAvatar = async (req, res) => {
         const reviewer = await Reviewer.findBy();
         return res.status(200).json(reviewer);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return  res.status(404).json({ message: error.message });
     }
 }
