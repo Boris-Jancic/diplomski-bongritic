@@ -241,14 +241,41 @@ export const getAverageGradesUser = async (req, res) => {
     }
 }
 
-export const updateCommentStatus = async (req, res) => {
+export const updateUserCommentStatus = async (req, res) => {
+    const data = req.body
+    try {
+        const post = await Post.findOne({'game.name': data.game}).exec()
+        const filteredComments = []
+        if (!data.deletion) {
+            post.userComments.forEach(comment => {
+                String(comment._id) === data.commentId && (comment.reported = false)
+                filteredComments.push(comment)
+            })
+            post.userComments.splice(0, post.userComments.length)
+            post.userComments = filteredComments
+            post.save()
+            return res.status(200).json({'message': 'Successfully approved comment'});
+        } else {
+            post.userComments.forEach((comment, i) => {
+                if (comment._id !== data.commentId) post.userComments.splice(i, 1)
+            })
+            post.save()
+            return res.status(200).json({'message': 'Successfully deleted comment'});
+        }
+    } catch (error) {
+        console.log( error.message )
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const updateReviewerCommentStatus = async (req, res) => {
     const data = req.body
     try {
         const post = await Post.findOne({'game.name': data.game}).exec()
         const filteredComments = []
         if (data.approved) {
             post.reviewerComments.forEach(comment => {
-                if (comment === data.commentId) comment.approved = true, filteredComments.push(comment)
+                String(comment._id) === data.commentId && (comment.approved = true, filteredComments.push(comment))
             })
             post.reviewerComments.splice(0, post.reviewerComments.length)
             post.reviewerComments = filteredComments
@@ -256,7 +283,7 @@ export const updateCommentStatus = async (req, res) => {
             return res.status(200).json({'message': 'Successfully approved comment'});
         } else {
             post.reviewerComments.forEach(comment => {
-                if (comment !== data.commentId) filteredComments.push(comment)
+                String(comment._id) !== data.commentId && (filteredComments.push(comment))
             })
             post.reviewerComments.splice(0, post.reviewerComments.length)
             post.reviewerComments = filteredComments
@@ -295,6 +322,37 @@ export const getNotApprovedComments = async (req, res) => {
         posts.forEach(item => item.reviewerComments.length > 0 && notApprovedComment.push(item.reviewerComments[0]))
 
         return res.status(200).json(notApprovedComment);
+    } catch (error) {
+        console.log( error.message )
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const getReportedComments = async (req, res) => {
+    try {
+        const posts = await Post.aggregate([
+            {
+                $project : {
+                    userComments: {
+                        $filter: {
+                            input: "$userComments",
+                            as: "comment",
+                            cond: {
+                                $eq: [ "$$comment.reported", true ]
+                            }
+                        }
+                    },
+                },
+            },
+            { $unset: ["_id"] }
+        ])
+        .exec()
+
+        const reportedComments = []
+
+        posts.forEach(item => item.userComments.length > 0 && reportedComments.push(item.userComments[0]))
+
+        return res.status(200).json(reportedComments);
     } catch (error) {
         console.log( error.message )
         return res.status(404).json({ message: error.message });
