@@ -149,7 +149,7 @@ const CriticReviews = () => {
               {latestPost?.game?.name}
             </Link>
           </Heading>
-          {latestPost && <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} />}
+          { latestPost.reviewerComments.at(-1) && <BlogAuthor name={latestPost.reviewerComments.at(-1)?.author} date={new Date(String(latestPost.reviewerComments.at(-1)?.date))} avatar={latestPost.reviewerComments.at(-1)?.avatar} />}
         </Box>
       </Box>
       <Divider marginTop={100} />
