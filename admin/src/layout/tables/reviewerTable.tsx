@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, Flex, Input, InputGroup, Badge, useToast, Image } from '@chakra-ui/react'
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, Flex, Input, InputGroup, Badge, useToast, Image, Link } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { getReviewers, updateReviewerAccess } from '../../api/reviewers/reviewerService'
 import Paginator from '../../components/pagination'
@@ -70,7 +70,15 @@ export default function ReviewerTable() {
                                     <Td>{reviewer.firstName}</Td>
                                     <Td>{reviewer.lastName}</Td>
                                     <Td>{reviewer.jmbg}</Td>
-                                    <Td>{reviewer.username}</Td>
+                                    <Td>
+                                        <Link
+                                            href={`/critic/reviews?name=${reviewer.username}&email=${reviewer.email}`}
+                                            fontWeight="700"
+                                            cursor="pointer"
+                                        >
+                                            {reviewer.username}
+                                        </Link>    
+                                    </Td>
                                     <Td>{reviewer.email}</Td>
                                     <Td textAlign='center'><Badge>{String(reviewer.activated)}</Badge></Td>
                                     <Td>{new Date(reviewer.createdAt).toLocaleString()}</Td>

@@ -1,4 +1,4 @@
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, Badge, useToast } from '@chakra-ui/react'
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, Badge, useToast, Link, useColorModeValue } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Paginator from '../../components/pagination'
 import { Blog } from '../../interface/post'
@@ -15,7 +15,7 @@ export default function UserTable() {
     })
   
     useEffect(() => {
-        getUsers(currentPage, 1, -1).then((res: any) => setResponseData(res.data))
+        getUsers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
     }, [currentPage])
 
     const handleAccessClick = async (username: string) => {
@@ -50,7 +50,15 @@ export default function UserTable() {
                         responseData && responseData.clients.map((client: Blog.Client) => {
                             return(
                                 <Tr key={client._id}>
-                                    <Td>{client.username}</Td>
+                                    <Td>
+                                        <Link
+                                            fontWeight="700"
+                                            cursor="pointer"
+                                            href={`/user/reviews?name=${client.username}`}
+                                        >
+                                            {client.username}
+                                        </Link>
+                                    </Td>
                                     <Td>{client.email}</Td>
                                     <Td>{new Date(client.createdAt).toLocaleString()}</Td>
                                     <Td textAlign='center'><Badge>{String(client.activated)}</Badge></Td>
