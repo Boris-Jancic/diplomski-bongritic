@@ -1,5 +1,6 @@
 import Post from '../models/post.js'
 import mongoose from 'mongoose'
+import mailToClient from '../service/mailer.js'
 
 export const getPosts = async (req, res) => { 
     const { page = 1, limit = 1, createdAt = -1 } = req.query
@@ -10,13 +11,13 @@ export const getPosts = async (req, res) => {
             .skip((page - 1) * limit)
             .sort({"createdAt": createdAt})
 
-        res.status(200).json({
+        return res.status(200).json({
             currentPage: Math.ceil(page),
             totalPages: Math.ceil(count / limit),
             posts: posts
         });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -30,22 +31,22 @@ export const getPostByGameName = async (req, res) => {
         const regex = new RegExp(escapeRegex(gameName), 'gi');
         const count = await Post.countDocuments()
         const post = await Post.find({'game.name': regex})
-        res.status(200).json({
+        return res.status(200).json({
             currentPage: page,
             totalPages: Math.ceil(count / limit),
             posts: post
         });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
 export const getLatestPost = async (req, res) => { 
     try {
         const post = await Post.findOne().sort({"createdAt": -1}) 
-        res.status(200).json(post);
+        return res.status(200).json(post);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -56,14 +57,13 @@ export const getPost = async (req, res) => {
 
         post.reviewerComments = post.reviewerComments.filter(comment => comment.approved)
 
-        res.status(200).json(post);
+        return res.status(200).json(post);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
 export const createPost = async (req, res) => {
-    console.log(req.body)
     const comment = {
         game: req.body.comment.game,
         author: req.body.comment.author,
@@ -89,9 +89,9 @@ export const createPost = async (req, res) => {
         newPost.reviewerComments.push(comment)
         newPost.game = req.body.game
         newPost.save()
-        res.status(201).send(newPost)
+        return res.status(201).send(newPost)
     } catch (error) {
-        res.status(409).json({message: error.message})
+        return res.status(409).json({message: error.message})
     }
 }
 
@@ -157,10 +157,10 @@ export const getReviewerComments = async (req, res) => {
                 }}
         ])
         .exec()
-        res.status(200).json(post);
+        return res.status(200).json(post);
     } catch (error) {
         console.log(error.message)
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -180,13 +180,14 @@ export const getUserComments = async (req, res) => {
                             }
                         }
                     },
-                }}
+                }
+            }
         ])
         .exec()
-        res.status(200).json(post);
+        return res.status(200).json(post);
     } catch (error) {
         console.log(error.message)
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -209,10 +210,9 @@ export const getAverageGradesReviewer = async (req, res) => {
                 }
             }
         ])
-        res.status(200).json(grades[0]);
+        return res.status(200).json(grades[0]);
     } catch (error) {
-        console.log(error.message)
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
     }
 }
 
@@ -235,9 +235,69 @@ export const getAverageGradesUser = async (req, res) => {
                 }
             }
         ])
-        res.status(200).json(grades[0]);
+        return res.status(200).json(grades[0]);
     } catch (error) {
-        console.log(error.message)
-        res.status(404).json({ message: error.message });
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const updateCommentStatus = async (req, res) => {
+    const data = req.body
+    try {
+        const post = await Post.findOne({'game.name': data.game}).exec()
+
+        const filteredComments = []
+        if (data.approved) {
+            post.reviewerComments.forEach(comment => {
+                if (comment === data.commentId) comment.approved = true, filteredComments.push(comment)
+            })
+            post.reviewerComments.splice(0, post.reviewerComments.length)
+            post.reviewerComments = filteredComments
+            post.save()
+            return res.status(200).json({'message': 'Successfully approved comment'});
+        } else {
+            post.reviewerComments.forEach(comment => {
+                if (comment !== data.commentId) filteredComments.push(comment)
+            })
+            post.reviewerComments.splice(0, post.reviewerComments.length)
+            post.reviewerComments = filteredComments
+            post.save()
+            mailToClient(data.email, 'Regarding a comment you made', data.answer)
+            return res.status(200).json({'message': 'Successfully denied comment'});
+        }
+    } catch (error) {
+        console.log( error.message )
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const getNotApprovedComments = async (req, res) => {
+    try {
+        const posts = await Post.aggregate([
+            {
+                $project : {
+                    reviewerComments: {
+                        $filter: {
+                            input: "$reviewerComments",
+                            as: "comment",
+                            cond: {
+                                $eq: [ "$$comment.approved", false ]
+                            }
+                        }
+                    },
+                },
+            },
+            { $unset: ["_id"] }
+        ])
+        .exec()
+
+        const notApprovedComment = []
+
+        posts.forEach(item => item.reviewerComments.length > 0 && notApprovedComment.push(item.reviewerComments[0]))
+
+        return res.status(200).json(notApprovedComment);
+    } catch (error) {
+        console.log( error.message )
+        return res.status(404).json({ message: error.message });
     }
 }

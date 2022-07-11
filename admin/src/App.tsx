@@ -21,8 +21,9 @@ import CriticCommentView from "./layout/criticCommentView"
 import ReviewerComments from "./layout/criticComments"
 import AboutUs from "./layout/aboutUs"
 import UserComments from "./layout/userComments"
-import ReviewerTable from "./layout/reviewerTable"
-import NotApprovedReviewerTable from "./layout/notApprovedReviewersTable"
+import ReviewerTable from "./layout/tables/reviewerTable"
+import NotApprovedReviewerTable from "./layout/tables/notApprovedReviewersTable"
+import CommentApprovalTable from "./layout/tables/commentApprovalTable"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -47,6 +48,7 @@ export const App = () => (
           <Route path="/critic/reviews" element={<ReviewerComments />} />
           <Route path="/critic/view" element={<ReviewerTable />} />
           <Route path="/critic/view/registration" element={<NotApprovedReviewerTable />} />
+          <Route path="/critic/comment/approval" element={<CommentApprovalTable />} />
           <Route path="/user/reviews" element={<UserComments />} />
           <Route path="/about" element={<AboutUs />}></Route>
 

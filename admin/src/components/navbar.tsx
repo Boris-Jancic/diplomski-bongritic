@@ -318,7 +318,7 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'Comment approval',
         subLabel: 'See and approve or deny reviewer comments',
-        href: '#',
+        href: '/critic/comment/approval',
       },
     ],
   },

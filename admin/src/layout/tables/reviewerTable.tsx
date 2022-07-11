@@ -1,12 +1,12 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Heading, ButtonGroup, Flex, Input, InputGroup, Badge, useToast, Image } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { getNotApprovedReviewers, updateReviewerAccess, updateReviewerRegistrationRequest } from '../api/reviewers/reviewerService'
-import Paginator from '../components/pagination'
-import ReviewerModal from '../components/reviewerModal'
-import { Blog } from '../interface/post'
-import { Reviewers } from '../interface/reviewers'
+import { getReviewers, updateReviewerAccess } from '../../api/reviewers/reviewerService'
+import Paginator from '../../components/pagination'
+import ReviewerModal from '../../components/reviewerModal'
+import { Blog } from '../../interface/post'
+import { Reviewers } from '../../interface/reviewers'
 
-export default function NotApprovedReviewerTable() {
+export default function ReviewerTable() {
     const toast = useToast()
     const [currentPage, setCurrentPage] = useState(1)
     const [responseData, setResponseData] = useState<Reviewers.ResponseData>({
@@ -15,12 +15,12 @@ export default function NotApprovedReviewerTable() {
         reviewers: []
     })
     useEffect(() => {
-        getNotApprovedReviewers(1, 8, -1).then((res: any) => setResponseData(res.data))
+        getReviewers(1, 8, -1).then((res: any) => setResponseData(res.data))
     }, [currentPage])
     
   
     useEffect(() => {
-        getNotApprovedReviewers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
+        getReviewers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
     }, [currentPage])
 
     const handleAccessClick = async (username: string) => {
@@ -32,28 +32,14 @@ export default function NotApprovedReviewerTable() {
                 position: 'bottom',
                 isClosable: true,
             })
-            getNotApprovedReviewers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
-        })
-        .catch()
-    }
-
-    const handleRequestClick = async (email: string, approved: boolean) => {
-        updateReviewerRegistrationRequest(email, approved)
-        .then((res: any) => {
-            toast({
-                title: res.data.message,
-                status: 'success',
-                position: 'bottom',
-                isClosable: true,
-            })
-            getNotApprovedReviewers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
+            getReviewers(currentPage, 8, -1).then((res: any) => setResponseData(res.data))
         })
         .catch()
     }
 
     return (
             <TableContainer>
-                <Heading textAlign='left' m={25}>Awaiting registration answer</Heading>
+                <Heading textAlign='left' m={25}>Reviewer table</Heading>
                 <Table variant='simple' colorScheme='teal'>
                     <Thead>
                     <Tr>
@@ -89,13 +75,10 @@ export default function NotApprovedReviewerTable() {
                                     <Td textAlign='center'><Badge>{String(reviewer.activated)}</Badge></Td>
                                     <Td>{new Date(reviewer.createdAt).toLocaleString()}</Td>
                                     <Td>
-                                        <ReviewerModal username={reviewer.username} biography={reviewer.biography} />
                                         <ButtonGroup variant='outline' spacing={1}>
-                                            <Button mx={5} color="green.400" onClick={() => handleRequestClick(reviewer.email, true)}>
-                                                Allow
-                                            </Button>
-                                            <Button mx={5} color="red" onClick={() => handleRequestClick(reviewer.email, false)}>
-                                                Deny
+                                            <ReviewerModal username={reviewer.username} biography={reviewer.biography} />
+                                            <Button mx={5} color="red" onClick={() => handleAccessClick(reviewer.username)}>
+                                                {reviewer.activated ? <>Block</> : <>Unblock</> }
                                             </Button>
                                         </ButtonGroup>
                                     </Td>

@@ -9,44 +9,52 @@ import {
     getAverageGradesReviewer,
     getAverageGradesUser,
     getPostByGameName,
-    reportUserComment
+    reportUserComment,
+    updateCommentStatus,
+    getNotApprovedComments
 } from "../controllers/posts.js"
-import { checkClient, checkReviewer, badRequestHandler } from "./security.js"
+import { checkClient, checkReviewer, checkAdmin, badRequestHandler } from "./security.js"
 
 const router = express.Router()
 
-router.post('/', checkReviewer, createPost)
 
+router.get('/', getPosts) 
+router.get('/one', getPost)
+router.get('/latest', getLatestPost)
+router.get('/average/reviewers/grade', getAverageGradesReviewer)
+router.get('/average/users/grade', getAverageGradesUser)
+router.get('/game', getPostByGameName)
+router.get('/not-approved/comments',
+    [],
+    checkAdmin,
+    badRequestHandler,
+    getNotApprovedComments)
+
+router.post('/',
+    [],
+    checkReviewer,
+    badRequestHandler,
+    createPost)
 router.post('/user/comment', 
     [
         check("text")
-            .isString()
-            .notEmpty()
-            .trim()
-            .withMessage("Your review comment can't be empty"),
+        .isString()
+        .notEmpty()
+        .trim()
+        .withMessage("Your review comment can't be empty"),
         check("grade")
-            .isNumeric()
-            .isIn([1,2,3,4,5])
-            .withMessage("Please select a grade for your review"),
+        .isNumeric()
+        .isIn([1,2,3,4,5])
+        .withMessage("Please select a grade for your review"),
     ],
     badRequestHandler,
     checkClient,
     createUserComment)
-
-router.post('/user/comment/report', 
+router.post('/user/comment/report',
+    [],
     checkClient,
     reportUserComment)
 
-router.get('/', getPosts) 
-
-router.get('/one', getPost)
-
-router.get('/latest', getLatestPost)
-
-router.get('/average/reviewers/grade', getAverageGradesReviewer)
-
-router.get('/average/users/grade', getAverageGradesUser)
-
-router.get('/game', getPostByGameName)
+router.put('/comment/approval', updateCommentStatus)
 
 export default router
