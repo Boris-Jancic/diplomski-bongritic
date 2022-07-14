@@ -85,12 +85,6 @@ export default function Login() {
             <Input type="password" onChange={(e: React.ChangeEvent<HTMLInputElement>) => inputHandler(e, 'password')}/>
           </FormControl>
           <Stack spacing={6}>
-            <Stack
-              direction={{ base: 'column', sm: 'row' }}
-              align={'start'}
-              justify={'space-between'}>
-              <Link color={'green.300'}>Forgot password?</Link>
-            </Stack>
             <Button colorScheme={'green'} variant={'solid'} 
               onClick={() => handleLogin()}>
               Sign in
