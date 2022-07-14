@@ -9,9 +9,8 @@ export default function UserComments() {
   const [responseData, setResponseData] = useState<any>([])
 
   useEffect(() => {
-    if(username) {
-      getUserReviews(String(username)).then(response => setResponseData(response.data))
-    }
+    username && getUserReviews(String(username)).then(response => setResponseData(response.data))
+    console.log(responseData)
   }, [username])
 
   return (
@@ -19,16 +18,16 @@ export default function UserComments() {
         <Heading my={5}>{username}'s comments</Heading>
 
         <Divider m={2}/>
-        
+
         {!responseData ? <GridItem rowSpan={4}><Spinner size='xl' /></GridItem> : (
           responseData.length === 0 ?  <Text fontSize={'md'} textDecor={'underline'}>This user doesen't have any comments yet</Text> : 
-              responseData.map((post: any) => {
-                  return ( <UserCard key={post.userComments[0]._id} comment={post.userComments[0]} /> )
-                  })
-              )
+            responseData.map((post: any) => {
+                if (post.userComments.length > 0) return ( <UserCard key={post.userComments[0]._id} comment={post.userComments[0]} /> )
+              })
+          )
         }
 
-        <Divider m={2}/>
+      <Divider m={2}/>
         
     </Box>
   )
