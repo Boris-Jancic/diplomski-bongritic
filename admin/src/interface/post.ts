@@ -97,4 +97,14 @@ export module Blog {
         createdAt: string;
         _id: string;
     }
+
+    export interface TopRatedGames {
+        reviewerTopGames: TopRatedGame[]
+        userTopGames: TopRatedGame[]
+    }
+
+    export interface TopRatedGame {
+        game: string,
+        criticGrade: number
+    }
 }

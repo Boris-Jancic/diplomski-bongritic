@@ -11,6 +11,7 @@ export const postReviewerPost = async (post: Blog.CreatePost) => await AxiosClie
 export const getPostsByGame = async (page: number, limit: number, gameName: string) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts/game?page=${page}&limit=${limit}&gameName=${gameName}`)
 export const getLatestReviewerPost = async () => await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/latest`)
 export const getReviewerPost = async (id: string) => await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/one?id=${id}`)
+export const getTopRatedUserGames = async () => await AxiosClient.get<any>(`${BASE_URL}/posts/top-rated/reviewer/games`)
 
 export const getUserReviews = async (username: string) => await AxiosClient.get<any>(`${BASE_URL}/users/comments?username=${username}`)
 export const getUserAverageGrade = async (gameId: string) => await AxiosClient.get<Blog.AverageGrades>(`${BASE_URL}/posts/average/users/grade?id=${gameId}`)

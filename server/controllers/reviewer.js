@@ -95,6 +95,19 @@ export const alterReviewerAccess = async (req, res) => {
     }
 }
 
+export const getTotalReviewerNumber = async (req, res) => {
+    try {
+        const total = await Reviewer.countDocuments()
+        const awaitingApproval = await Reviewer.countDocuments({"awaitingApproval": true})
+        const blocked = await Reviewer.countDocuments({"activated": false})
+        const approved = total - awaitingApproval
+        return res.status(200).json({total: total, awaitingApproval: awaitingApproval, approved: approved, blocked: blocked})
+    } catch (error) {
+        console.log(error.message)
+        return res.status(404).json({ message: error.message });
+    }
+}
+
 export const getAvatar = async (req, res) => { 
     try {
         const reviewer = await Reviewer.findBy();

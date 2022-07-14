@@ -10,3 +10,4 @@ export const getUsers = async(page: number, limit: number, createdAt: number) =>
 
 export const updateUserAccess = async (username: string) => await axios.put(`${BASE_URL}/users/access?username=${username}`, {}, {headers: {"Authorization" : `${user.role}`}})
 
+export const getTotalUsers = async () => await AxiosClient.get(`${BASE_URL}/users/total`)
