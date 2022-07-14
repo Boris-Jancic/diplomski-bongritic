@@ -30,22 +30,23 @@ export const loginReviewer = async (req, res) => {
 }
 
 export const registerReviewer = async (req, res) => {
-    const newReviewer = new Reviewer(req.body)
-
-    if (newReviewer === null) return res.status(400).json({message: 'Bad request'})
-    
-    if (!isValidEmail(newReviewer.email)) return res.status(400).json({message: 'Email not valid'})
-    
-    if (await Reviewer.exists({username: newReviewer.username}).exec() !== null) 
-        return res.status(409).json({message: 'A reviewer with that username is already registered'})
-    
-    if (await Reviewer.exists({email: newReviewer.email}).exec() !== null) 
-        return res.status(409).json({message: 'A reviewer with that email is already registered'})
-
     try {
-        mailToClient(newClient.email, 'Regarding your registration', 'Thank you for wanting to register as a critic to Bongritic! Our admins will see your request shortly, please be patient.' )
+        const newReviewer = new Reviewer(req.body)
+    
+        if (newReviewer === null) return res.status(400).json({message: 'Bad request'})
+        
+        if (!isValidEmail(newReviewer.email)) return res.status(400).json({message: 'Email not valid'})
+        
+        if (await Reviewer.exists({username: newReviewer.username}).exec() !== null) 
+            return res.status(409).json({message: 'A reviewer with that username is already registered'})
+        
+        if (await Reviewer.exists({email: newReviewer.email}).exec() !== null) 
+            return res.status(409).json({message: 'A reviewer with that email is already registered'})
+
+        mailToClient(newReviewer.email, 'Regarding your registration', 'Thank you for wanting to register as a critic to Bongritic! Our admins will see your request shortly, please be patient.' )
         newReviewer.password = await bcrypt.hash(newReviewer.password, await bcrypt.genSalt(10));
         newReviewer.activated = false
+        newReviewer.awaitingApproval = true
         newReviewer.save()
         return res.status(201).send({message: 'We have sent you a email regarding your verification'})
     } catch (error) {
