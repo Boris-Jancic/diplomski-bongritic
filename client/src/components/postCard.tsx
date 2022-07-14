@@ -47,12 +47,14 @@ export default function PostCard(props: {post: Blog.Post}) {
                     </Text>
                 </Heading>
                 <Divider width={"50%"} m={5} />
-                <BlogAuthor
-                    name={props.post.reviewerComments.at(-1)?.author}
-                    email={props.post.reviewerComments.at(-1)?.authorEmail}
-                    avatar={props.post.reviewerComments.at(-1)?.avatar}
-                    date={new Date(String(props.post.reviewerComments.at(-1)?.date))}
-                />
+                { props.post.reviewerComments.at(-1) && 
+                    <BlogAuthor
+                        name={props.post.reviewerComments.at(-1)?.author}
+                        email={props.post.reviewerComments.at(-1)?.authorEmail}
+                        avatar={props.post.reviewerComments.at(-1)?.avatar}
+                        date={new Date(String(props.post.reviewerComments.at(-1)?.date))}
+                    /> 
+                }
             </Box>
             </WrapItem>
         </Wrap>
