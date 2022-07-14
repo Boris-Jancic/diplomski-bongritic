@@ -13,9 +13,9 @@ export const loginReviewer = async (req, res) => {
 
         const isPasswordCorrect = await bcrypt.compare(password, reviewer.password);
 
-        if (!isPasswordCorrect) { mailToClient(email, 'Warning', 'Bad login, was this you?' ) ;return res.status(400).json({ message: "Invalid credentials" });}
+        if (!isPasswordCorrect) { return res.status(400).json({ message: "Invalid credentials" });}
 
-        if (!reviewer.activated) return res.status(403).json({ message: "You are now allowed to use Bongritic" });
+        if (!reviewer.activated || reviewer.awaitingApproval) return res.status(403).json({ message: "You are now allowed to use Bongritic" });
 
         const token = jwt.sign({ 
             email: email,
@@ -43,12 +43,11 @@ export const registerReviewer = async (req, res) => {
         if (await Reviewer.exists({email: newReviewer.email}).exec() !== null) 
             return res.status(409).json({message: 'A reviewer with that email is already registered'})
 
-        mailToClient(newReviewer.email, 'Regarding your registration', 'Thank you for wanting to register as a critic to Bongritic! Our admins will see your request shortly, please be patient.' )
         newReviewer.password = await bcrypt.hash(newReviewer.password, await bcrypt.genSalt(10));
         newReviewer.activated = false
         newReviewer.awaitingApproval = true
         newReviewer.save()
-        return res.status(201).send({message: 'We have sent you a email regarding your verification'})
+        return res.status(201).send({message: 'Please wait for the admin to approve your account'})
     } catch (error) {
         return res.status(409).json({message: error.message})
     }
