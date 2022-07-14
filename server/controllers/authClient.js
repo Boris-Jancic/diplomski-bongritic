@@ -14,7 +14,7 @@ export const loginClient = async (req, res) => {
 
         const isPasswordCorrect = await bcrypt.compare(password, client.password);
 
-        if (!isPasswordCorrect) { mailToClient(email, 'Warning', 'Bad login, was this you?' ) ;return res.status(400).json({ message: "Invalid credentials" });}
+        if (!isPasswordCorrect) { return res.status(400).json({ message: "Invalid credentials" });}
 
         if (!client.activated) return res.status(403).json({ message: "You are now allowed to use Bongritic" });
 
@@ -44,11 +44,10 @@ export const registerClient = async (req, res) => {
         if (await Client.exists({email: newClient.email}).exec() !== null) 
             return res.status(409).json({message: 'A client with that email is already registered'})
 
-        mailToClient(newClient.email, 'Regarding your registration', 'Thank you for registering to Bongritic! ' )
         newClient.password = await bcrypt.hash(newClient.password, await bcrypt.genSalt(10));
         newClient.activated = true
         newClient.save()
-        return res.status(201).send({message: 'We have sent you a email regarding your registration'})
+        return res.status(201).send({message: 'Successfully registered !'})
     } catch (error) {
         return res.status(409).json({message: error.message})
     }
