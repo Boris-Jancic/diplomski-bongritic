@@ -89,7 +89,6 @@ export default function Login() {
               direction={{ base: 'column', sm: 'row' }}
               align={'start'}
               justify={'space-between'}>
-              <Link color={'green.300'}>Forgot password?</Link>
             </Stack>
             <Button colorScheme={'green'} variant={'solid'} 
               onClick={() => handleLogin()}>
