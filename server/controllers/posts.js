@@ -79,7 +79,7 @@ export const createPost = async (req, res) => {
     try {
         if (await Post.exists({'game.id': req.body.game.id}).exec() !== null) {        
             const existingPost = await Post.findOne({'game.id': req.body.game.id}).exec()
-            if (await Post.exists({'reviewerComments':{"$elemMatch":{author: comment.author}}}).exec() === null)
+            if (existingPost.reviewerComments.filter(com => com.author === comment.author).length > 0)
                 return res.status(409).json({message: 'You have already submited a review for this game'})
             existingPost.reviewerComments.push(comment)
             existingPost.save()
@@ -150,7 +150,6 @@ export const getReviewerComments = async (req, res) => {
                             as: "comment",
                             cond: {
                                 $eq: [ "$$comment.authorEmail", email ],
-                                $eq: [ "$$comment.approved", true ]
                             }
                         }
                     },
@@ -273,18 +272,22 @@ export const updateUserCommentStatus = async (req, res) => {
 export const updateReviewerCommentStatus = async (req, res) => {
     const data = req.body
     try {
+        const filteredComments = []
         const post = await Post.findOne({'game.name': data.game}).exec()
         if (data.approved) {
             post.reviewerComments.forEach(comment => {
-                String(comment._id) === data.commentId && (comment.approved = true, Post.updateOne({'_id': comment._id}, comment))
+                String(comment._id) === data.commentId && (comment.approved = true)
+                filteredComments.push(comment)
             })
+            post.reviewerComments = filteredComments
+            post.save()
             return res.status(200).json({'message': 'Successfully approved comment'});
         } else {
-            const filteredComments = []
             post.reviewerComments.forEach(comment => {
                 String(comment._id) !== data.commentId && (filteredComments.push(comment))
             })
-            post.reviewerComments.splice(0, post.reviewerComments.length), post.reviewerComments = filteredComments
+            post.reviewerComments.splice(0, post.reviewerComments.length), 
+            post.reviewerComments = filteredComments
             post.save()
             mailToClient(data.email, 'Regarding a comment you made', data.answer)
             return res.status(200).json({'message': 'Successfully denied comment'});
@@ -372,7 +375,6 @@ export const getTopRatedReviewerGames = async (req, res) => {
             },
             { $unset: ["_id"] }
         ])
-
         const userTopGames = await Post.aggregate([
             {
                 $unwind: "$userComments"
@@ -391,8 +393,4 @@ export const getTopRatedReviewerGames = async (req, res) => {
         console.log({ message: error.message })
         return res.status(404).json({ message: error.message });
     }
-}
-
-export const getTopRatedUserGames = async (req, res) => {
-
 }
