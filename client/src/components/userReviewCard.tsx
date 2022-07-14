@@ -2,8 +2,11 @@ import { Flex, useColorModeValue, Box, chakra, Link, Text, Button, ModalCloseBut
 import { Blog } from "../interface/post";
 import { BsFlag } from 'react-icons/bs';
 import { postUserReport } from "../api/blogs/blogService";
+import { useRecoilState } from "recoil";
+import { authAtom } from "../state/auth";
 
 export default function UserCard(props: {key: string, comment: Blog.UserComment}){
+  const [user, setUser] = useRecoilState(authAtom);
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -47,7 +50,7 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
         rounded="lg"
         shadow="lg"
         bg={useColorModeValue("white", "gray.800")}
-        maxW="2xl"
+        width="100%"
       >
         <Flex justifyContent="space-between" alignItems="center">
           <chakra.span
@@ -99,9 +102,11 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
               {props.comment.author}
             </Link>
           </Flex>
-          <Button variant='ghost' rightIcon={<BsFlag color="red" />} onClick={onOpen}>
-            Flag
-          </Button>
+          { user && 
+            <Button variant='ghost' rightIcon={<BsFlag color="red" />} onClick={onOpen}>
+              Flag
+            </Button>
+          }
         </Flex>
 
         <Modal
