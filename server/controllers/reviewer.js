@@ -58,16 +58,17 @@ export const getNotApprovedReviewers = async (req, res) => {
 }
 
 export const manageReviewerRegistrationRequest = async (req, res) => {
-    const { email, approve } = req.query
+    const { email, approved } = req.query
     try {
         const reviewer = await Reviewer.findOne({'email': email}).exec()
-        if (!approve) {
+        if (approved === 'true') {
             mailToClient(reviewer.email, 'Regarding your access', 'Hello, we have reviewed your profile and given you access to Bongritic.' )
             reviewer.awaitingApproval = false
-            reviewer.save()
+            reviewer.activated = true
+            await reviewer.save()
         } else {
             mailToClient(reviewer.email, 'Regarding your access', 'Hello, we have reviewed your profile and decided that you do not meet the criteria for a game critic.') 
-            await Reviewer.deleteOne({'email': email}).exec()
+            await reviewer.remove()
         }
         return res.status(200).json({message: "Successfully updated reviewer"});
     } catch (error) {
