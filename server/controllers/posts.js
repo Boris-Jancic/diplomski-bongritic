@@ -79,11 +79,11 @@ export const createPost = async (req, res) => {
     try {
         if (await Post.exists({'game.id': req.body.game.id}).exec() !== null) {        
             const existingPost = await Post.findOne({'game.id': req.body.game.id}).exec()
-            if (await Post.exists({'reviewerComments':{"$elemMatch":{author: comment.author}}}).exec() !== null)
+            if (await Post.exists({'reviewerComments':{"$elemMatch":{author: comment.author}}}).exec() === null)
                 return res.status(409).json({message: 'You have already submited a review for this game'})
             existingPost.reviewerComments.push(comment)
             existingPost.save()
-            res.status(201).send(existingPost)
+            return res.status(201).send(existingPost)
         }
         const newPost = new Post()
         newPost.reviewerComments.push(comment)
@@ -176,7 +176,8 @@ export const getUserComments = async (req, res) => {
                             input: "$userComments",
                             as: "comment",
                             cond: {
-                                $eq: [ "$$comment.author", username ]
+                                $eq: [ "$$comment.author", username ],
+                                $eq: [ "$$comment.reported", false ]
                             }
                         }
                     },
@@ -268,25 +269,22 @@ export const updateUserCommentStatus = async (req, res) => {
     }
 }
 
+
 export const updateReviewerCommentStatus = async (req, res) => {
     const data = req.body
     try {
         const post = await Post.findOne({'game.name': data.game}).exec()
-        const filteredComments = []
         if (data.approved) {
             post.reviewerComments.forEach(comment => {
-                String(comment._id) === data.commentId && (comment.approved = true, filteredComments.push(comment))
+                String(comment._id) === data.commentId && (comment.approved = true, Post.updateOne({'_id': comment._id}, comment))
             })
-            post.reviewerComments.splice(0, post.reviewerComments.length)
-            post.reviewerComments = filteredComments
-            post.save()
             return res.status(200).json({'message': 'Successfully approved comment'});
         } else {
+            const filteredComments = []
             post.reviewerComments.forEach(comment => {
                 String(comment._id) !== data.commentId && (filteredComments.push(comment))
             })
-            post.reviewerComments.splice(0, post.reviewerComments.length)
-            post.reviewerComments = filteredComments
+            post.reviewerComments.splice(0, post.reviewerComments.length), post.reviewerComments = filteredComments
             post.save()
             mailToClient(data.email, 'Regarding a comment you made', data.answer)
             return res.status(200).json({'message': 'Successfully denied comment'});
@@ -357,4 +355,44 @@ export const getReportedComments = async (req, res) => {
         console.log( error.message )
         return res.status(404).json({ message: error.message });
     }
+}
+
+export const getTopRatedReviewerGames = async (req, res) => {
+    try {
+        const reviewerTopGames = await Post.aggregate([
+            {
+                $unwind: "$reviewerComments"
+            },
+            {
+                $group : {
+                    _id: "$_id",
+                    game : { $first: '$game.name'},
+                    criticGrade: { $avg: "$reviewerComments.grade"},
+                }
+            },
+            { $unset: ["_id"] }
+        ])
+
+        const userTopGames = await Post.aggregate([
+            {
+                $unwind: "$userComments"
+            },
+            {
+                $group : {
+                    _id: "$_id",
+                    game : { $first: '$game.name'},
+                    userGrade: { $avg: "$userComments.grade"},
+                }
+            },
+            { $unset: ["_id"] }
+        ])
+        return res.status(200).json({reviewerTopGames: reviewerTopGames, userTopGames: userTopGames});
+    } catch (error) {
+        console.log({ message: error.message })
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+export const getTopRatedUserGames = async (req, res) => {
+
 }

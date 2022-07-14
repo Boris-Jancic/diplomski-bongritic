@@ -25,6 +25,7 @@ import NotApprovedReviewerTable from "./layout/tables/notApprovedReviewersTable"
 import CommentApprovalTable from "./layout/tables/commentApprovalTable"
 import UserTable from "./layout/tables/userTable"
 import ReportedCommentTable from "./layout/tables/reportedCommentsTable"
+import Statistics from "./layout/statistics"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -57,8 +58,10 @@ export const App = () => (
           <Route path="/user/reviews" element={<UserComments />} />
           <Route path="/users/view" element={<UserTable />} />
           <Route path="/users/reported/comments" element={<ReportedCommentTable />} />
+
+          <Route path="/statistics" element={<Statistics />} />
           
-          <Route path="/about" element={<AboutUs />}></Route>
+          <Route path="/about" element={<AboutUs />} />
 
         </Routes>
 

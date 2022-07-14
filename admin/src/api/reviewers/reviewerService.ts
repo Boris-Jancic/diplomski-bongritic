@@ -13,3 +13,5 @@ export const getReviewers = async(page: number, limit: number, createdAt: number
 export const updateReviewerRegistrationRequest = async (email: string, approved: boolean) => await axios.put(`${BASE_URL}/reviewers/registration?email=${email}&approved=${approved}`, {}, {headers: {"Authorization" : `${user.role}`}})
 
 export const updateReviewerAccess = async (username: string) => await axios.put(`${BASE_URL}/reviewers/access?username=${username}`, {}, {headers: {"Authorization" : `${user.role}`}})
+
+export const getTotalReviewers = async () => await AxiosClient.get(`${BASE_URL}/reviewers/total`)

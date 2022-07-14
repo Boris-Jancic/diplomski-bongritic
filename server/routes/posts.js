@@ -12,12 +12,12 @@ import {
     reportUserComment,
     updateReviewerCommentStatus,
     getNotApprovedComments,
-    updateUserCommentStatus
+    updateUserCommentStatus,
+    getTopRatedReviewerGames
 } from "../controllers/posts.js"
 import { checkClient, checkReviewer, checkAdmin, badRequestHandler } from "./security.js"
 
 const router = express.Router()
-
 
 router.get('/', getPosts) 
 router.get('/one', getPost)
@@ -25,6 +25,7 @@ router.get('/latest', getLatestPost)
 router.get('/average/reviewers/grade', getAverageGradesReviewer)
 router.get('/average/users/grade', getAverageGradesUser)
 router.get('/game', getPostByGameName)
+router.get('/top-rated/reviewer/games', badRequestHandler, checkAdmin, getTopRatedReviewerGames)
 router.get('/not-approved/comments',
     [],
     checkAdmin,

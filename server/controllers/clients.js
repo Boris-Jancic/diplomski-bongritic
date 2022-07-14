@@ -41,3 +41,14 @@ export const updateClientAccess = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+
+export const getTotalUsers = async (req, res) => {
+    try {
+        const total = await Client.countDocuments()
+        const blocked = await Client.countDocuments({"activated": false})
+        return res.status(200).json({total: total, blocked: blocked})
+    } catch (error) {
+        console.log(error.message)
+        return res.status(404).json({ message: error.message });
+    }
+}
