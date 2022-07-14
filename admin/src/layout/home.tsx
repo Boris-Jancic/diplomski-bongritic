@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import TatooedGamer from '../images/tatooedGamer.jpg'
 
 export default function Home() {
   return (
@@ -35,9 +36,8 @@ export default function Home() {
         <Image
           alt={'Login Image'}
           objectFit={'cover'}
-          src={
-            'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-          }
+          rounded={10}
+          src={TatooedGamer}
         />
       </Flex>
     </Stack>
