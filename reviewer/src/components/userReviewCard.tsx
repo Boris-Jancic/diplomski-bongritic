@@ -18,7 +18,7 @@ export default function UserCard(props: {key: string, comment: Blog.UserComment}
         rounded="lg"
         shadow="lg"
         bg={useColorModeValue("white", "gray.800")}
-        maxW="2xl"
+        width="100%"
       >
         <Flex justifyContent="space-between" alignItems="center">
           <chakra.span
