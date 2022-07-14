@@ -57,7 +57,7 @@ export default function PostView() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [newComment, setNewComment] = useState<Blog.CreateUserComment>(
     {
-      author: user.username,
+      author: '',
       text: '',
       grade: 0,
       date: '',
@@ -73,7 +73,8 @@ export default function PostView() {
   }, [id])
 
   useEffect(() => {
-    if(post?.game) {
+    if(post?.game && user) {
+      newComment.author = user.username
       newComment.gameId = post.game.id
       getGameTrailers(post.game.id)
       .then(response => response.data)
@@ -293,22 +294,24 @@ export default function PostView() {
                     > 
                     {avgUserGrade === 0 ? <>No user grades</> : (avgUserGrade)}
                     </Text>
-                        
-                  <Button
-                    py={2}
-                    px={2}
-                    mx={5}
-                    variant={'solid'}
-                    colorScheme={'teal'}
-                    fontSize="xl"
-                    fontWeight={700}
-                    rounded="md"        
-                    onClick={() => {
-                      onOpen()
-                    }}
-                  > 
-                    + Add Your review
-                  </Button>
+                  
+                  {user && 
+                    <Button
+                      py={2}
+                      px={2}
+                      mx={5}
+                      variant={'solid'}
+                      colorScheme={'teal'}
+                      fontSize="xl"
+                      fontWeight={700}
+                      rounded="md"        
+                      onClick={() => {
+                        onOpen()
+                      }}
+                    > 
+                      + Add Your review
+                    </Button>
+                  }
                   <Modal
                     isOpen={isOpen}
                     onClose={onClose}
