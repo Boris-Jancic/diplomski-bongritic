@@ -36,7 +36,11 @@ export const BlogAuthor: React.FC<Blog.BlogAuthorProps> = (props) => {
         alt={`Avatar of ${props.name}`}
       />
       <Text fontSize="xs">
-        Last reviewed by <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`}><b>{props.name}</b></Link> {props.date?.toLocaleDateString()}
+        Last reviewed by 
+        <Link href={`/critic/reviews?name=${props.name}&email=${props.email}`}>
+          <b>{props.name}</b>
+        </Link>
+        {props.date?.toLocaleDateString()}
       </Text>
     </HStack>
   );
