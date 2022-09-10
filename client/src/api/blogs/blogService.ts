@@ -9,13 +9,17 @@ export const postUserComment = async (comment: Blog.CreateUserComment) => await 
 
 export const postUserReport = async (comment: Blog.UserComment) => await AxiosClient.post<Blog.UserComment>(`${BASE_URL}/posts/user/comment/report`, comment)
 
-export const getPosts = async (page: number, limit: number, createdAt: number) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts?page=${page}&limit=${limit}&createdAt=${createdAt}`)
+export const getPosts = async (page: number, limit: number, createdAt: number) =>
+  await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts?page=${page}&limit=${limit}&createdAt=${createdAt}`)
 
-export const getPostsByGame = async (page: number, limit: number, gameName: string) => await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts/game?page=${page}&limit=${limit}&gameName=${gameName}`)
+export const getPostsByGame = async (page: number, limit: number, gameName: string) =>
+  await AxiosClient.get<Array<Blog.PostResponse>>(`${BASE_URL}/posts/game?page=${page}&limit=${limit}&gameName=${gameName}`)
 
-export const getReviewerPost = async (id: string) => await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/one?id=${id}`)
+export const getReviewerPost = async (id: string) => 
+  await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/one?id=${id}`)
 
-export const getLatestReviewerPost = async () => await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/latest`)
+export const getLatestReviewerPost = async () => 
+  await AxiosClient.get<Blog.Post>(`${BASE_URL}/posts/latest`)
 
 export const getCriticReviews = async (email: string) => await AxiosClient.get<any>(`${BASE_URL}/reviewers/comments?email=${email}`)
 
