@@ -23,41 +23,26 @@ import UserComments from "./layout/userComments"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-
     <Navbar />
-
     <Box textAlign="center" fontSize="xl">
       <Grid minH="100vh" p={3}>
         <VStack spacing={8}>
-
         <Routes>
-
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterClient />} />
-
           <Route path="/reviews/critics" element={<CriticReviews />} />
-
           <Route path="/games/review/success" element={<SuccessfullPost />} />
-
           <Route path="/post/view" element={<PostView />} />
           <Route path="/post/review/critic" element={<CriticCommentView />} />
-
           <Route path="/critic/reviews" element={<ReviewerComments />} />
-
           <Route path="/user/reviews" element={<UserComments />} />
-          
           <Route path="/about" element={<AboutUs />}></Route>
-
         </Routes>
-
         </VStack>
       </Grid>
     </Box>
-
     <Footer />
-    
-
   </ChakraProvider>
 )
